@@ -1,7 +1,6 @@
 /*
  H2_main.c
-Main program for a variational Monte Carlo simulation. 
-
+Main program for a variational Monte Carlo simulation of a helium atom.
  */
 
 #include <stdio.h>
@@ -14,7 +13,7 @@ Main program for a variational Monte Carlo simulation.
 // Main program 
 int main(){
 
-	// Declaration 
+	// Declaration of variables and arrays
 	int i, j;
 	double sum, sum2;
 	int N; // Number of interations
@@ -27,15 +26,10 @@ int main(){
 	double positions[2][3]; // Positions in 3D for 2 particles
 	double p[2][3]; // Probabilities
 
-	// Open a file to print the variable x in
-	FILE *m_file;
-	m_file = fopen("probdensity.data","w");
-
 	// Initialize variables
 	sum = 0;
 	sum2 = 0;
 	var = 0;
-	p[0] = sin(PI * x[0]);
 	delta = 0.45;
 	throw_away = 2000;
 	rejections = 0;
@@ -46,19 +40,26 @@ int main(){
 	for(i = 0; i < 3; i++){
 		positions[0][i] = 1.0;
 		positions[1][i] = -1.0;
+
+		p[0][i] = 0;
+		p[1][i] = 0;
 	}
 
+	// Open a file to print the variable x in
+	FILE *m_file;
+	m_file = fopen("positions.data","w");
+
 	// Save initial positions
-	fprintf(m_file,"%F \n", x[0]);
-		
-	int n = 0;
+	fprintf(m_file,"%F \t %F \t %F  \t %F \t %F \t %F \n", positions[0][0], positions[0][1], positions[0][2], positions[1][0], positions[1][1], positions[1][2]);
 
 	// Calculate the integral
 	for(j = 1; j < N; j++){
 
-		// Generate random number and get next state x
-		random = (double) rand() / (double) RAND_MAX;	
-		x[j] = x[j-1] + delta*(random - 0.5);
+		// Generate random number and get next configuration
+		for(){
+			random = (double) rand() / (double) RAND_MAX;	
+			positions[][j] = x[j-1] + delta*(random - 0.5);
+		}
 
 		// Calculate the probability
 		p[j] = 0.0;
