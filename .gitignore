@@ -20,8 +20,6 @@
 *.so.*
 *.dylib
 
-
-# Executables
 *.exe
 *.out
 *.app
@@ -35,9 +33,7 @@ MD
 *.eps
 *.mat
 
-
 # OS generated files #
-######################
 .DS_Store
 .DS_Store?
 ._*
