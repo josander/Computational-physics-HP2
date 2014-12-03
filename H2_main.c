@@ -14,19 +14,19 @@ Main program for a variational Monte Carlo simulation.
 // Main program 
 int main(){
 
-	// Declaration
+	// Declaration 
 	int i, j;
 	double sum, sum2;
-	int N = 10000;
-	double mean, mean2;
-	double var;
+	int N; // Number of interations
+	double mean, mean2, var; // <f>, <f^2> and var[f]
 	double x[N];
 	double p[N];
 	double delta;
 	double q;
-	int throw_away, rejections;
-	double r;
-	double alpha = 0.1;
+	int throw_away, rejections; // Number of iterations to throw away in the begining, number of rejections
+	double r; // Random number [0,1]
+	double alpha;
+	double positions[2][3]; // Positions in 3D for 2 particles
 
 	// Open a file to print the variable x in
 	FILE *m_file;
@@ -41,6 +41,8 @@ int main(){
 	delta = 0.45;
 	throw_away = 2000;
 	rejections = 0;
+	alpha = 0.1;
+	N = 10000;
 
 	fprintf(m_file,"%F \n", x[0]);
 		
