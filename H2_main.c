@@ -24,6 +24,7 @@ int main(){
 	double random[2][3]; // Random number [0,1]
 	double alpha;
 	double positions[2][3]; // Positions in 3D for 2 particles
+	double temp[2][3]; // Temporary array for new positions
 	double p[2][3]; // Probabilities
 
 	// Initialize variables
@@ -56,9 +57,9 @@ int main(){
 	for(j = 1; j < N; j++){
 
 		// Generate random number and get next configuration
-		for(){
-			random = (double) rand() / (double) RAND_MAX;	
-			positions[][j] = x[j-1] + delta*(random - 0.5);
+		for(i = 0; i < 3; i++){
+			random[0][i] = (double) rand() / (double) RAND_MAX;	
+			temp[0][i] = positions[][i] + delta*(random[][] - 0.5);
 		}
 
 		// Calculate the probability
