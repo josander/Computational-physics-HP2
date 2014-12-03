@@ -20,7 +20,7 @@ int main(){
 	double mean, mean2, var; // <f>, <f^2> and var[f]
 	double delta;
 	double q;
-	int throw_away, rejections; // Number of iterations to throw away in the begining, number of rejections
+	int throw_away, norejection; // Number of iterations to throw away in the begining, number of rejections
 	double random; // Random number [0,1]
 	double alpha;
 	double positions[2][3]; // Positions in 3D for 2 particles
@@ -34,7 +34,7 @@ int main(){
 	var = 0;
 	delta = 0.45;
 	throw_away = 2000;
-	rejections = 0;
+	norejection = 0;
 	alpha = 0.1;
 	N = 10000;
 
@@ -87,7 +87,7 @@ int main(){
 			}
 
 			p[0][j] = p[0][j-1];
-			rejections++;
+			norejection++;
 		}
 		
 		// Skip the 'throw_away' first datapoints
@@ -104,7 +104,7 @@ int main(){
 	var = (mean2 - mean*mean)/(N-throw_away-1);	
 	
 	// In the terminal, print how many throw aways
-	printf("Nbr of rejections: %i \n", rejections);
+	printf("Nbr of rejections: %i \n", N-norejection);
 
 	// Print the result in the terminal
 	printf("For N = %i \t Integral = %.8F ± %.8F \n", N-throw_away, mean, sqrt(var));
