@@ -10,7 +10,7 @@ Contains functions for homeproblem 2/b
 #define PI 3.141592653589
 
 // Function that returns a distance between two particles
-double getDistance(double positions[][3]){
+double getDistance(double positions [][3]){
 	
 	double distance = 0;
 	int i;

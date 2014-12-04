@@ -12,7 +12,7 @@ Main program for a variational Monte Carlo simulation of a helium atom.
 
 // Main program 
 int main(){
-
+	printf("Initiation");
 	// Declaration of variables and arrays
 	int i, j;
 	double sum, sum2;
@@ -27,7 +27,7 @@ int main(){
 	double temp[2][3]; // Temporary array for new positions
 	double p[2][3]; // Probabilities
 	double distance; 
-
+	
 	// Initialize variables
 	sum = 0;
 	sum2 = 0;
@@ -58,7 +58,7 @@ int main(){
 
 	// Save initial positions
 	fprintf(m_file,"%F \n", distance);
-
+	
 	// Calculate the integral
 	for(j = 1; j < N; j++){
 
@@ -72,7 +72,7 @@ int main(){
 		}
 
 		// Calculate distance between the particles
-		distance = 1;//getDistance(positions);
+		distance = getDistance(positions);
 
 		// Calculate the probability
 		p[0][j] = sin(PI * distance);
