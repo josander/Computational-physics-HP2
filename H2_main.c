@@ -38,6 +38,8 @@ int main(){
 	alpha = 0.1;
 	N = 10000;
 
+	srand(time(NULL));
+
 	// Initialize positions
 	for(i = 0; i < 3; i++){
 		positions[0][i] = 1.0;
@@ -75,21 +77,32 @@ int main(){
 		// Calculate the probability
 		p[0][j] = sin(PI * distance);
 		q = p[0][j]/p[0][j-1];
+		
+		// If q > 1 all trials will be accepted
+		if (q < 1){
 
-		// New random number
-		random = (double) rand() / (double) RAND_MAX;
+			// New random number
+			random = (double) rand() / (double) RAND_MAX;
 
-		// Trial, if q >= random, save the temporary positions
-		if(q >= random){
+			// Trial, if q >= random, save the temporary positions
+			if(q >= random){
+				for(i = 0; i < 3; i++){
+					positions[0][i] = temp[0][i];
+					positions[1][i] = temp[1][i];
+				}	
+				p[0][j] = p[0][j-1];
+				norejection++;
+				}
+		}
+		else{
 			for(i = 0; i < 3; i++){
-				positions[0][i] = temp[0][i];
-				positions[1][i] = temp[1][i];
-			}
-
+					positions[0][i] = temp[0][i];
+					positions[1][i] = temp[1][i];
+			}	
 			p[0][j] = p[0][j-1];
 			norejection++;
+
 		}
-		
 		// Skip the 'throw_away' first datapoints
 		if(j > throw_away){
 			sum += distance * (1-distance) * 2.0 / sin(PI * distance) / PI;
