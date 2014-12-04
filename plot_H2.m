@@ -50,15 +50,18 @@ meanEnergy = mean(energy(:,2))
 
 %% Block averaging
 
+clc
+
 % import data
-data = importdata('block_s.data');
+block = importdata('block_s.data');
+blockLength = 500;
 
 % calculate the statistical inefficiency
-statistical_inefficiency = mean(data(50:100))
+statistical_inefficiency = mean(block(blockLength/20:blockLength/10))
 
 % plot
 figure(3);
-plot(0:10:1000-10,data,'o', [0 1000], [statistical_inefficiency statistical_inefficiency]);
+plot(0:10:blockLength-10,block,'o', [0 blockLength], [statistical_inefficiency statistical_inefficiency]);
 xlabel('Blocksize','fontsize',12);
 ylabel('Statistical inefficiency','fontsize',12);
 title('Block averaging','fontsize',12);

@@ -54,7 +54,6 @@ double get_local_e(double position[][3], double alfa){
 }  		 
 
 
-
 // Function that calculates the local wave function
 double get_wavefunction(double positions[][3], double alpha, double distance){
 
@@ -77,6 +76,7 @@ double get_wavefunction(double positions[][3], double alpha, double distance){
 
 }
 
+
 // Get the distances to the nucleus
 void get_distances_nucleus(double positions[][3], double distances_nucleus[]){
 		
@@ -92,6 +92,7 @@ void get_distances_nucleus(double positions[][3], double distances_nucleus[]){
 	distances_nucleus[0] = sqrt(distances_nucleus[0]);
 	distances_nucleus[1] = sqrt(distances_nucleus[1]);
 }
+
 
 // Function that caculated the auto-correlation function, the statistical inefficiency
 void error_corr_func(double *A, int length){
@@ -140,10 +141,11 @@ void error_corr_func(double *A, int length){
 	s = i;
 
 	sigmaTot = sqrt((mean2 - mean*mean)/steps*s);
-	printf("Statistical inefficiency: %F \n", s);
 	printf("Result: %.5f ± %.5f \n", mean, sigmaTot);
+	printf("Statistical inefficiency (corr): %F \n", s);
 
 }
+
 
 // Calculate the statistical inefficiency from the block average
 void error_block_average(double *A, int length){
@@ -162,11 +164,12 @@ void error_block_average(double *A, int length){
 	fprintf(block,"%f \n", 0);
 	
 	// Calculate statistical inefficiency for different block sizes
-	for(block_size = 10; block_size < 1000; block_size = block_size + 10){
+	for(block_size = 10; block_size < 500; block_size = block_size + 10){
 
 		int nbr_blocks = length/block_size;
 		double block_means[nbr_blocks];
 		double block_means2[nbr_blocks];
+		double mean_s = 0;
 
 		// Determine variance for the whole array
 		mean = 0.0;
@@ -201,15 +204,17 @@ void error_block_average(double *A, int length){
 
 		var_F = (mean2_F - mean_F * mean_F);
 		s = block_size * var_F / var_f;
+
+		if(block_size)
+		mean_s += s;
 		
 		fprintf(block,"%f \n", s);
 
 	}
 
-	printf("Statistical inefficiency: %f \n", s);
+	printf("Statistical inefficiency (block): %f \n", s);
 
 	// Close file
 	fclose(block);
-
 }
 

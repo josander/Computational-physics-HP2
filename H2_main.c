@@ -37,10 +37,10 @@ int main(){
 	var = 0;
 	delta = 0.967;
 	alpha = 0;
-	alpha_start = 0.1;
-	alpha_stop = 0.1;
+	alpha_start = 0.05;
+	alpha_stop = 0.25;
 	N = 100000;
-	throw_away = 20000;
+	throw_away = 50000;
 	double energy_l[N + 1];
 
 	// Seed for generating random numbers
@@ -62,7 +62,7 @@ int main(){
 		energy_mean = 0;
 
 		// Print what alpha
-		printf("********** ALPHA = %f **********\n", alpha);
+		printf("********** ALPHA = %.3f **********\n", alpha);
 
 		// Initialize positions
 		for(i = 0; i < 3; i++){
@@ -70,7 +70,6 @@ int main(){
 			positions[1][i] = -1.0;
 		}
 
-	
 		// Get initial distances
 		distance = getDistance(positions);
 
