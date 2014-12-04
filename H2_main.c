@@ -25,8 +25,9 @@ int main(){
 	double alpha;
 	double positions[2][3]; // Positions in 3D for 2 particles
 	double temp[2][3]; // Temporary array for new positions
-	double p[2][3]; // Probabilities
+	double p, p_temp; // Probabilities
 	double distance; 
+	double wave_func;
 	
 	// Initialize variables
 	sum = 0;
@@ -42,15 +43,19 @@ int main(){
 
 	// Initialize positions
 	for(i = 0; i < 3; i++){
-		positions[0][i] = 1.0;
-		positions[1][i] = -1.0;
-
-		p[0][i] = 0;
-		p[1][i] = 0;
+		positions[0][i] = 0.5;
+		positions[1][i] = -0.5;
 	}
 
+	
 	// Get initial distances
-	distance = 1;//getDistance(positions);
+	distance = getDistance(positions);
+
+	// Get wave function
+	wave_func = get_wavefunction(positions, alpha, distance);
+
+	// Calculate the probability
+	p = pow(wave_func, 2);
 
 	// Open a file to print the variable x in
 	FILE *m_file;
@@ -74,9 +79,12 @@ int main(){
 		// Calculate distance between the particles
 		distance = getDistance(positions);
 
+		// Get wave function
+		wave_func = get_wavefunction(positions, alpha, distance);
+
 		// Calculate the probability
-		p[0][j] = sin(PI * distance);
-		q = p[0][j]/p[0][j-1];
+		p_temp = pow(wave_func,2);
+		q = p_temp/p;
 		
 		// If q > 1 all trials will be accepted
 		if (q < 1){
@@ -90,7 +98,7 @@ int main(){
 					positions[0][i] = temp[0][i];
 					positions[1][i] = temp[1][i];
 				}	
-				p[0][j] = p[0][j-1];
+				p = p_temp;
 				norejection++;
 				}
 		}
@@ -99,14 +107,14 @@ int main(){
 					positions[0][i] = temp[0][i];
 					positions[1][i] = temp[1][i];
 			}	
-			p[0][j] = p[0][j-1];
+			p = p_temp;
 			norejection++;
 
 		}
 		// Skip the 'throw_away' first datapoints
 		if(j > throw_away){
-			sum += distance * (1-distance) * 2.0 / sin(PI * distance) / PI;
-			sum2 += distance * (1-distance) * 2.0 / sin(PI * distance) / PI * distance * (1-distance) * 2.0 / sin(PI * distance) / PI;
+			//sum += distance * (1-distance) * 2.0 / sin(PI * distance) / PI;
+			//sum2 += distance * (1-distance) * 2.0 / sin(PI * distance) / PI * distance * (1-distance) * 2.0 / sin(PI * distance) / PI;
 		}
 
 	}

@@ -25,6 +25,7 @@ double getDistance(double positions [][3]){
 
 }
 
+
 // Function that calculates the local energy given position and alfa-parameter
 double getLocalE(double position[][3], double alfa){
 
@@ -49,5 +50,26 @@ double getLocalE(double position[][3], double alfa){
 
 	double E = -4 + vector*distInv*pow(alfaDistInv,2) - distInv*pow(alfaDistInv,3) -0.25*pow(alfaDistInv,4) + distInv;
 	return(E);  		 
+
+double get_wavefunction(double positions[][3], double alpha, double distance){
+
+	int i;
+	double r1;
+	double r2;
+	double wave_func;
+
+	for(i = 0; i < 3; i++){
+		r1 += positions[0][i];
+		r2 += positions[1][i];
+	}
+
+	r1 = sqrt(r1);
+	r2 = sqrt(r2);
+	
+	wave_func = exp(-2 * r1) * exp(-2 * r2) * exp(distance/(2 * (1 + alpha * distance)));
+
+	return wave_func;
+	
+
 }
 
