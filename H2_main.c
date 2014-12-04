@@ -38,7 +38,7 @@ int main(){
 	delta = 0.967;
 	alpha = 0;
 	alpha_start = 0.1;
-	alpha_stop = 0.2;
+	alpha_stop = 0.1;
 	N = 100000;
 	throw_away = 20000;
 	double energy_l[N + 1];
@@ -170,8 +170,11 @@ int main(){
 		error_block_average(energy_l, N + 1);
 
 		// In the terminal, print how many rejections
-		printf("Tot nbr iteration: %i \t Nbr eq iterations: %i \n", N, throw_away);
+		printf("Tot nbr iteration: %i \nNbr eq iterations: %i \n", N, throw_away);
 		printf("Nbr rejections: %i \n", N-norejection);
+
+		// Print loop finished-line
+		printf("**************************************\n");
 	}
 
 	// Close the data-files
