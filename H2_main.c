@@ -12,7 +12,7 @@ Main program for a variational Monte Carlo simulation of a helium atom.
 
 // Main program 
 int main(){
-	printf("Initiation");
+
 	// Declaration of variables and arrays
 	int i, j;
 	double sum, sum2;
@@ -28,12 +28,14 @@ int main(){
 	double p, p_temp; // Probabilities
 	double distance; 
 	double wave_func;
+	double energy;
+	double distances_nucleus[2];
 	
 	// Initialize variables
 	sum = 0;
 	sum2 = 0;
 	var = 0;
-	delta = 0.45;
+	delta = 0.65;
 	throw_away = 2000;
 	norejection = 0;
 	alpha = 0.1;
@@ -43,26 +45,36 @@ int main(){
 
 	// Initialize positions
 	for(i = 0; i < 3; i++){
-		positions[0][i] = 0.5;
-		positions[1][i] = -0.5;
+		positions[0][i] = 1.0;
+		positions[1][i] = -1.0;
 	}
 
 	
 	// Get initial distances
 	distance = getDistance(positions);
+	printf("Dist: %f \n", distance);
 
 	// Get wave function
 	wave_func = get_wavefunction(positions, alpha, distance);
+	printf("W: %f \n", wave_func);
 
-	// Calculate the probability
+	// Get wave function
+	energy = get_local_e(positions, alpha);
+	printf("E: %f \n", energy);
+
+	// Calculate the probability (Not normalized)
 	p = pow(wave_func, 2);
+	printf("P: %f \n", p);
 
 	// Open a file to print the variable x in
 	FILE *m_file;
-	m_file = fopen("distance.data","w");
+	m_file = fopen("distances.data","w");
 
-	// Save initial positions
-	fprintf(m_file,"%F \n", distance);
+	// Get distances to nucleus
+	get_distances_nucleus(positions, distances_nucleus);
+
+	// Save initial distances to nucleus
+	fprintf(m_file,"%f \t %f \n", distances_nucleus[0], distances_nucleus[1]);
 	
 	// Calculate the integral
 	for(j = 1; j < N; j++){
@@ -117,6 +129,12 @@ int main(){
 			//sum2 += distance * (1-distance) * 2.0 / sin(PI * distance) / PI * distance * (1-distance) * 2.0 / sin(PI * distance) / PI;
 		}
 
+		// Get distances to nucleus
+		get_distances_nucleus(positions, distances_nucleus);
+
+		// Save initial distances to nucleus
+		fprintf(m_file,"%f \t %f \n", distances_nucleus[0], distances_nucleus[1]);
+
 	}
 
 	// Get the means to calculate the variance
@@ -126,14 +144,6 @@ int main(){
 	
 	// In the terminal, print how many throw aways
 	printf("Nbr of rejections: %i \n", N-norejection);
-
-	// Print the result in the terminal
-	printf("For N = %i \t Integral = %.8F ± %.8F \n", N-throw_away, mean, sqrt(var));
-
-	// Print x to distribution.data
-	for(j = 0; j < N; j++){
-		fprintf(m_file,"%F \n", distance);
-	}
 
 	// Close the data-file
 	fclose(m_file); 
