@@ -25,3 +25,24 @@ double getDistance(double positions[][3]){
 
 }
 
+double get_wavefunction(double *positions, double alpha, double distance){
+
+	int i;
+	double r1;
+	double r2;
+	double wave_func;
+
+	for(i = 0; i < 3; i++){
+		r1 += positions[0][i];
+		r2 += positions[1][i];
+	}
+
+	r1 = sqrt(r1);
+	r2 = sqrt(r2);
+	
+	wave_func = exp(-2 * r1) * exp(-2 * r2) * exp(distance/(2 * (1 + alpha * distance)));
+
+	return wave_func;
+	
+}
+
