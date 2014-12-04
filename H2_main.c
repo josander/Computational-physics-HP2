@@ -36,7 +36,7 @@ int main(){
 	sum = 0;
 	sum2 = 0;
 	var = 0;
-	delta = 1.0;
+	delta = 0.967;
 	norejection = 0;
 	alpha = 0.1;
 	N = 100000;
@@ -62,8 +62,6 @@ int main(){
 	// Get energies for initial configuration
 	energy_l = get_local_e(positions, alpha);
 	energy_mean += energy_l;
-	printf("E: %f \n", energy_l);
-
 
 	// Calculate the probability (Not normalized)
 	p = pow(wave_func, 2);
@@ -76,7 +74,6 @@ int main(){
 	FILE *e_file;
 	e_file = fopen("energy.data","w");
 
-
 	// Get distances to nucleus
 	get_distances_nucleus(positions, distances_nucleus);
 
@@ -84,7 +81,6 @@ int main(){
 	fprintf(m_file,"%f \n", distances_nucleus[0]);
 	fprintf(m_file,"%f \n", distances_nucleus[1]);
 	fprintf(e_file,"%f \t %f \n", energy_l, energy_mean);
-	// Calculate the integral
 
 	// Main for-loop
 	for(j = 1; j < N; j++){
@@ -123,8 +119,7 @@ int main(){
 				p = p_temp;
 				norejection++;
 				}
-		}
-		else{
+		}else{
 			for(i = 0; i < 3; i++){
 					positions[0][i] = temp[0][i];
 					positions[1][i] = temp[1][i];
