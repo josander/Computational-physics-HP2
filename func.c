@@ -155,6 +155,7 @@ void error_block_average(double *A, int length){
 	double mean_F, mean2_F, var_F;
 	double s;
 
+	// Create file to save data
 	FILE *block;
 	block = fopen("block_s.txt","w");
 
@@ -207,6 +208,7 @@ void error_block_average(double *A, int length){
 
 	printf("Statistical inefficiency: %f \n", s);
 
+	// Close file
 	fclose(block);
 
 }

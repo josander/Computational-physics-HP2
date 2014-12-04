@@ -22,7 +22,7 @@ int main(){
 	double q;
 	int throw_away, norejection; // Number of iterations to throw away in the begining, number of rejections
 	double random; // Random number [0,1]
-	double alpha;
+	double alpha_start, alpha_stop, alpha;
 	double positions[2][3]; // Positions in 3D for 2 particles
 	double temp[2][3]; // Temporary array for new positions
 	double p, p_temp; // Probabilities
@@ -36,134 +36,145 @@ int main(){
 	sum2 = 0;
 	var = 0;
 	delta = 0.967;
-	norejection = 0;
-	alpha = 0.1;
+	alpha = 0;
+	alpha_start = 0.1;
+	alpha_stop = 0.2;
 	N = 100000;
 	throw_away = 20000;
-	energy_mean = 0;
 	double energy_l[N + 1];
 
 	// Seed for generating random numbers
 	srand(time(NULL));
 
-	// Initialize positions
-	for(i = 0; i < 3; i++){
-		positions[0][i] = 1.0;
-		positions[1][i] = -1.0;
-	}
-
-	
-	// Get initial distances
-	distance = getDistance(positions);
-
-	// Get wave function
-	wave_func = get_wavefunction(positions, alpha, distance);
-
-	// Get energies for initial configuration
-	energy_l[0] = get_local_e(positions, alpha);
-	energy_mean += energy_l[0];
-
-	// Calculate the probability (Not normalized)
-	p = pow(wave_func, 2);
-
 	// Open a file to print the variable x in
-	FILE *m_file;
+	FILE *m_file;		
 	m_file = fopen("distances.data","w");
 
 	// Open a file to print the variable x in
 	FILE *e_file;
 	e_file = fopen("energy.data","w");
 
-	// Get distances to nucleus
-	get_distances_nucleus(positions, distances_nucleus);
+	// Perform the simulation for different alpha values
+	for(alpha = alpha_start; alpha <= alpha_stop; alpha = alpha + 0.05){
 
-	// Save initial distances to nucleus + energy
-	fprintf(m_file,"%f \n", distances_nucleus[0]);
-	fprintf(m_file,"%f \n", distances_nucleus[1]);
+		// Initiation for each new loop
+		norejection = 0;
+		energy_mean = 0;
 
-	// Main for-loop
-	for(j = 1; j < N + 1; j++){
+		// Print what alpha
+		printf("********** ALPHA = %f **********\n", alpha);
 
-		// Generate random numbers and get next configuration
+		// Initialize positions
 		for(i = 0; i < 3; i++){
-			random = (double) rand() / (double) RAND_MAX;	
-			temp[0][i] = positions[0][i] + delta*(random - 0.5);
-
-			random = (double) rand() / (double) RAND_MAX;	
-			temp[1][i] = positions[1][i] + delta*(random - 0.5);
+			positions[0][i] = 1.0;
+			positions[1][i] = -1.0;
 		}
 
-		// Calculate distance between the particles
-		distance = getDistance(temp);
+	
+		// Get initial distances
+		distance = getDistance(positions);
 
 		// Get wave function
-		wave_func = get_wavefunction(temp, alpha, distance);
+		wave_func = get_wavefunction(positions, alpha, distance);
 
-		// Calculate the probability
-		p_temp = pow(wave_func,2);
-		q = p_temp/p;
+		// Get energies for initial configuration
+		energy_l[0] = get_local_e(positions, alpha);
+		energy_mean += energy_l[0];
+
+		// Calculate the probability (Not normalized)
+		p = pow(wave_func, 2);
+
+		// Get distances to nucleus
+		get_distances_nucleus(positions, distances_nucleus);
+
+		// Save initial distances to nucleus + energy
+		fprintf(m_file,"%f \n", distances_nucleus[0]);
+		fprintf(m_file,"%f \n", distances_nucleus[1]);
+
+		// Main for-loop
+		for(j = 1; j < N + 1; j++){
+
+			// Generate random numbers and get next configuration
+			for(i = 0; i < 3; i++){
+				random = (double) rand() / (double) RAND_MAX;	
+				temp[0][i] = positions[0][i] + delta*(random - 0.5);
+
+				random = (double) rand() / (double) RAND_MAX;	
+				temp[1][i] = positions[1][i] + delta*(random - 0.5);
+			}
+
+			// Calculate distance between the particles
+			distance = getDistance(temp);
+
+			// Get wave function
+			wave_func = get_wavefunction(temp, alpha, distance);
+
+			// Calculate the probability
+			p_temp = pow(wave_func,2);
+			q = p_temp/p;
 		
-		// If q > 1 all trials will be accepted
-		if (q < 1){
+			// If q > 1 all trials will be accepted
+			if (q < 1){
 
-			// New random number
-			random = (double) rand() / (double) RAND_MAX;
+				// New random number
+				random = (double) rand() / (double) RAND_MAX;
 
-			// Trial, if q >= random, save the temporary positions
-			if(q >= random){
+				// Trial, if q >= random, save the temporary positions
+				if(q >= random){
+					for(i = 0; i < 3; i++){
+						positions[0][i] = temp[0][i];
+						positions[1][i] = temp[1][i];
+					}	
+					p = p_temp;
+					norejection++;
+					}
+			}else{
 				for(i = 0; i < 3; i++){
-					positions[0][i] = temp[0][i];
-					positions[1][i] = temp[1][i];
+						positions[0][i] = temp[0][i];
+						positions[1][i] = temp[1][i];
 				}	
 				p = p_temp;
 				norejection++;
-				}
-		}else{
-			for(i = 0; i < 3; i++){
-					positions[0][i] = temp[0][i];
-					positions[1][i] = temp[1][i];
-			}	
-			p = p_temp;
-			norejection++;
 
-		}
+			}
 
-		// Get energies for the current configuration
-		energy_l[j] = get_local_e(positions, alpha);
-		energy_mean += energy_l[j];
+			// Get energies for the current configuration
+			energy_l[j] = get_local_e(positions, alpha);
+			energy_mean += energy_l[j];
 
-		// Skip the 'throw_away' first datapoints
-		if(j > throw_away){
+			// Skip the 'throw_away' first datapoints
+			if(j > throw_away){
 
 			
-			sum += 1;
-			sum2 += 1;
+				sum += 1;
+				sum2 += 1;
 
-			// Get distances to nucleus
-			get_distances_nucleus(positions, distances_nucleus);
+				// Get distances to nucleus
+				get_distances_nucleus(positions, distances_nucleus);
 
-			// Save distances to nucleus
-			fprintf(m_file,"%f \n", distances_nucleus[0]);
-			fprintf(m_file,"%f \n", distances_nucleus[1]);
+				// Save distances to nucleus
+				fprintf(m_file,"%f \n", distances_nucleus[0]);
+				fprintf(m_file,"%f \n", distances_nucleus[1]);
 
-			// Save current energies
-			fprintf(e_file,"%f \t %f \n", energy_l[j], energy_mean/(j+1));
+				// Save current energies
+				fprintf(e_file,"%f \t %f \n", energy_l[j], energy_mean/(j+1));
 
-		}
+			}
 		
+		}
+
+		// Get statistical inefficiency from the correlation function
+		error_corr_func(energy_l, N + 1);
+
+		// Get statistical inefficiency from block averaging
+		error_block_average(energy_l, N + 1);
+
+		// In the terminal, print how many rejections
+		printf("Tot nbr iteration: %i \t Nbr eq iterations: %i \n", N, throw_away);
+		printf("Nbr rejections: %i \n", N-norejection);
 	}
-
-	// Get statistical inefficiency from the correlation function
-	error_corr_func(energy_l, N + 1);
-
-	// Get statistical inefficiency from block averaging
-	error_block_average(energy_l, N + 1);
-
-	// In the terminal, print how many rejections
-	printf("Tot nbr iteration: %i \t Nbr eq iterations: %i \n", N, throw_away);
-	printf("Nbr rejections: %i \n", N-norejection);
 
 	// Close the data-files
 	fclose(m_file); 
-	fclose(e_file); 
+	fclose(e_file);
 }
