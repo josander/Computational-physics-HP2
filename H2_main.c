@@ -12,7 +12,7 @@ Main program for a variational Monte Carlo simulation of a helium atom.
 
 // Main program 
 int main(){
-	printf("Initiation");
+
 	// Declaration of variables and arrays
 	int i, j;
 	double sum, sum2;
@@ -28,43 +28,65 @@ int main(){
 	double p, p_temp; // Probabilities
 	double distance; 
 	double wave_func;
+	double energy_l;
+	double energy_mean;
+	double distances_nucleus[2];
 	
 	// Initialize variables
 	sum = 0;
 	sum2 = 0;
 	var = 0;
-	delta = 0.45;
+	delta = 0.65;
 	throw_away = 2000;
 	norejection = 0;
 	alpha = 0.1;
-	N = 10000;
-
+	N = 100000;
+	energy_mean = 0;
 	srand(time(NULL));
 
 	// Initialize positions
 	for(i = 0; i < 3; i++){
-		positions[0][i] = 0.5;
-		positions[1][i] = -0.5;
+		positions[0][i] = 1.0;
+		positions[1][i] = -1.0;
 	}
 
 	
 	// Get initial distances
 	distance = getDistance(positions);
+	printf("Dist: %f \n", distance);
 
 	// Get wave function
 	wave_func = get_wavefunction(positions, alpha, distance);
+	printf("W: %f \n", wave_func);
 
-	// Calculate the probability
+	// Get wave function
+	energy_l = get_local_e(positions, alpha);
+	energy_mean += energy_l;
+	printf("E: %f \n", energy_l);
+
+	// Calculate the probability (Not normalized)
 	p = pow(wave_func, 2);
+	printf("P: %f \n", p);
 
 	// Open a file to print the variable x in
 	FILE *m_file;
-	m_file = fopen("distance.data","w");
+	m_file = fopen("distances.data","w");
 
-	// Save initial positions
-	fprintf(m_file,"%F \n", distance);
-	
+	// Open a file to print the variable x in
+	FILE *e_file;
+	e_file = fopen("energy.data","w");
+
+
+	// Get distances to nucleus
+	get_distances_nucleus(positions, distances_nucleus);
+
+	// Save initial distances to nucleus + energy
+	fprintf(m_file,"%f \n", distances_nucleus[0]);
+	fprintf(m_file,"%f \n", distances_nucleus[1]);
+	fprintf(e_file,"%f \t %f \n", energy_l, energy_mean);
 	// Calculate the integral
+
+	// Main for-loop
 	for(j = 1; j < N; j++){
 
 		// Generate random numbers and get next configuration
@@ -77,10 +99,10 @@ int main(){
 		}
 
 		// Calculate distance between the particles
-		distance = getDistance(positions);
+		distance = getDistance(temp);
 
 		// Get wave function
-		wave_func = get_wavefunction(positions, alpha, distance);
+		wave_func = get_wavefunction(temp, alpha, distance);
 
 		// Calculate the probability
 		p_temp = pow(wave_func,2);
@@ -117,6 +139,17 @@ int main(){
 			//sum2 += distance * (1-distance) * 2.0 / sin(PI * distance) / PI * distance * (1-distance) * 2.0 / sin(PI * distance) / PI;
 		}
 
+		// Get distances to nucleus
+		get_distances_nucleus(positions, distances_nucleus);
+
+		energy_l = get_local_e(positions, alpha);
+		energy_mean += energy_l;
+
+		// Save initial distances to nucleus
+		fprintf(m_file,"%f \n", distances_nucleus[0]);
+		fprintf(m_file,"%f \n", distances_nucleus[1]);
+		fprintf(e_file,"%f \t %f \n", energy_l, energy_mean/(j+1));
+		
 	}
 
 	// Get the means to calculate the variance
@@ -127,15 +160,7 @@ int main(){
 	// In the terminal, print how many throw aways
 	printf("Nbr of rejections: %i \n", N-norejection);
 
-	// Print the result in the terminal
-	printf("For N = %i \t Integral = %.8F ± %.8F \n", N-throw_away, mean, sqrt(var));
-
-	// Print x to distribution.data
-	for(j = 0; j < N; j++){
-		fprintf(m_file,"%F \n", distance);
-	}
-
-	// Close the data-file
+	// Close the data-files
 	fclose(m_file); 
-
+	fclose(e_file); 
 }

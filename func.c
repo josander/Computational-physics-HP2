@@ -27,7 +27,7 @@ double getDistance(double positions [][3]){
 
 
 // Function that calculates the local energy given position and alfa-parameter
-double getLocalE(double position[][3], double alfa){
+double get_local_e(double position[][3], double alfa){
 
 	int i;
 	double distance = getDistance(position);
@@ -52,6 +52,9 @@ double getLocalE(double position[][3], double alfa){
 	return(E);
 }  		 
 
+
+
+// Function that calculates the local wave function
 double get_wavefunction(double positions[][3], double alpha, double distance){
 
 	int i;
@@ -60,8 +63,8 @@ double get_wavefunction(double positions[][3], double alpha, double distance){
 	double wave_func;
 
 	for(i = 0; i < 3; i++){
-		r1 += positions[0][i];
-		r2 += positions[1][i];
+		r1 += pow(positions[0][i],2);
+		r2 += pow(positions[1][i],2);
 	}
 
 	r1 = sqrt(r1);
@@ -70,7 +73,22 @@ double get_wavefunction(double positions[][3], double alpha, double distance){
 	wave_func = exp(-2 * r1) * exp(-2 * r2) * exp(distance/(2 * (1 + alpha * distance)));
 
 	return wave_func;
-	
 
+}
+
+// Get the distances to the nucleus
+void get_distances_nucleus(double positions[][3], double distances_nucleus[]){
+		
+	int i;
+	distances_nucleus[0] = 0;
+	distances_nucleus[1] = 0;
+
+	for(i = 0; i < 3; i++){
+		distances_nucleus[0] += pow(positions[0][i],2);
+		distances_nucleus[1] += pow(positions[1][i],2);
+	}
+
+	distances_nucleus[0] = sqrt(distances_nucleus[0]);
+	distances_nucleus[1] = sqrt(distances_nucleus[1]);
 }
 

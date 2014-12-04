@@ -6,8 +6,8 @@ func.h
 #define _func_h
 
 extern double getDistance(double [][3]);
+extern double get_local_e(double [][3], double);
 extern double get_wavefunction(double [][3], double, double);
-
-extern double getLocalE(double [][3], double);
+extern void get_distances_nucleus(double [][3], double []);
 
 #endif
