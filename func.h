@@ -6,6 +6,6 @@ func.h
 #define _func_h
 
 extern double getDistance(double [][3]);
-extern double get_wavefunction(double **, double, double);
+extern double get_wavefunction(double [][3], double, double);
 
 #endif
