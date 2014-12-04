@@ -39,7 +39,7 @@ int main(){
 	throw_away = 2000;
 	norejection = 0;
 	alpha = 0.1;
-	N = 10000;
+	N = 100000;
 
 	srand(time(NULL));
 
