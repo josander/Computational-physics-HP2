@@ -28,7 +28,8 @@ int main(){
 	double p, p_temp; // Probabilities
 	double distance; 
 	double wave_func;
-	double energy;
+	double energy_l;
+	double energy_mean;
 	double distances_nucleus[2];
 	
 	// Initialize variables
@@ -39,8 +40,12 @@ int main(){
 	norejection = 0;
 	alpha = 0.1;
 	N = 100000;
+<<<<<<< HEAD
 	throw_away = 0;
 
+=======
+	energy_mean = 0;
+>>>>>>> 49b0f920cbac022294a9e823ec52ab1f20ae8629
 	srand(time(NULL));
 
 	// Initialize positions
@@ -57,7 +62,11 @@ int main(){
 	wave_func = get_wavefunction(positions, alpha, distance);
 
 	// Get wave function
-	energy = get_local_e(positions, alpha);;
+
+	energy_l = get_local_e(positions, alpha);
+	energy_mean += energy_l;
+	printf("E: %f \n", energy_l);
+
 
 	// Calculate the probability (Not normalized)
 	p = pow(wave_func, 2);
@@ -66,14 +75,21 @@ int main(){
 	FILE *m_file;
 	m_file = fopen("distances.data","w");
 
+	// Open a file to print the variable x in
+	FILE *e_file;
+	e_file = fopen("energy.data","w");
+
+
 	// Get distances to nucleus
 	get_distances_nucleus(positions, distances_nucleus);
 
-	// Save initial distances to nucleus
+	// Save initial distances to nucleus + energy
 	fprintf(m_file,"%f \n", distances_nucleus[0]);
 	fprintf(m_file,"%f \n", distances_nucleus[1]);
-	
+	fprintf(e_file,"%f \t %f \n", energy_l, energy_mean);
 	// Calculate the integral
+
+	// Main for-loop
 	for(j = 1; j < N; j++){
 
 		// Generate random numbers and get next configuration
@@ -126,13 +142,19 @@ int main(){
 			// Get distances to nucleus
 			get_distances_nucleus(positions, distances_nucleus);
 
-			// Save initial distances to nucleus
+			// Save distances to nucleus
 			fprintf(m_file,"%f \n", distances_nucleus[0]);
 			fprintf(m_file,"%f \n", distances_nucleus[1]);
 
+			// Get energies for the current configuration
+			energy_l = get_local_e(positions, alpha);
+			energy_mean += energy_l;
+
+			// Save current energies
+			fprintf(e_file,"%f \t %f \n", energy_l, energy_mean/(j+1));
+
 		}
-
-
+		
 	}
 
 	// Get the means to calculate the variance
@@ -143,7 +165,7 @@ int main(){
 	// In the terminal, print how many rejections
 	printf("Nbr iteration: %i \t Nbr rejections: %i \n", N, N-norejection);
 
-	// Close the data-file
+	// Close the data-files
 	fclose(m_file); 
-
+	fclose(e_file); 
 }
