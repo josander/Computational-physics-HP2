@@ -25,7 +25,7 @@ double getDistance(double positions [][3]){
 
 }
 
-double get_wavefunction(double *positions, double alpha, double distance){
+double get_wavefunction(double **positions, double alpha, double distance){
 
 	int i;
 	double r1;
