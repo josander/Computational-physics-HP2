@@ -40,12 +40,10 @@ int main(){
 	norejection = 0;
 	alpha = 0.1;
 	N = 100000;
-<<<<<<< HEAD
 	throw_away = 0;
-
-=======
 	energy_mean = 0;
->>>>>>> 49b0f920cbac022294a9e823ec52ab1f20ae8629
+
+	// Seed for generating random numbers
 	srand(time(NULL));
 
 	// Initialize positions
@@ -61,8 +59,7 @@ int main(){
 	// Get wave function
 	wave_func = get_wavefunction(positions, alpha, distance);
 
-	// Get wave function
-
+	// Get energies for initial configuration
 	energy_l = get_local_e(positions, alpha);
 	energy_mean += energy_l;
 	printf("E: %f \n", energy_l);
