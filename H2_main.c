@@ -74,7 +74,8 @@ int main(){
 	get_distances_nucleus(positions, distances_nucleus);
 
 	// Save initial distances to nucleus
-	fprintf(m_file,"%f \t %f \n", distances_nucleus[0], distances_nucleus[1]);
+	fprintf(m_file,"%f \n", distances_nucleus[0]);
+	fprintf(m_file,"%f \n", distances_nucleus[1]);
 	
 	// Calculate the integral
 	for(j = 1; j < N; j++){
@@ -133,7 +134,8 @@ int main(){
 		get_distances_nucleus(positions, distances_nucleus);
 
 		// Save initial distances to nucleus
-		fprintf(m_file,"%f \t %f \n", distances_nucleus[0], distances_nucleus[1]);
+		fprintf(m_file,"%f \n", distances_nucleus[0]);
+		fprintf(m_file,"%f \n", distances_nucleus[1]);
 
 	}
 
