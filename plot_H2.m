@@ -44,6 +44,26 @@ plot(energy(:,2), 'r');
 xlabel('Datapoints', 'fontsize', 12);
 ylabel('Energy', 'fontsize', 12);
 
+<<<<<<< HEAD
 meanEnergy = mean(energy(:,1))
 %energy(end,2)
+=======
+meanEnergy = mean(energy(:,2))
+
+%% Block averaging
+
+% import data
+data = importdata('block_s.data');
+
+% calculate the statistical inefficiency
+statistical_inefficiency = mean(data(50:100))
+
+% plot
+figure(3);
+plot(0:10:1000-10,data,'o', [0 1000], [statistical_inefficiency statistical_inefficiency]);
+xlabel('Blocksize','fontsize',12);
+ylabel('Statistical inefficiency','fontsize',12);
+title('Block averaging','fontsize',12);
+
+>>>>>>> 3003507b00ddb7ba6d6d9ffb3b7a373fa915430e
 
