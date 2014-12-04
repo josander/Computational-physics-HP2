@@ -14,7 +14,7 @@ figure(1);
 clf
 [y x] = hist(distNuc, nbins);
 bar(x, y/trapz(x,y))
-xlabel('Distance to the nucleus r [$a_0$]','Interpreter','latex', 'fontsize', 12);
+xlabel('Distance from the nucleus r [$a_0$]','Interpreter','latex', 'fontsize', 12);
 ylabel('PDF [1/$a_0$]','Interpreter','latex', 'fontsize', 12);    
 title('Probability density function for distance to nucleus','Interpreter','latex', 'fontsize', 14);
 hold on
@@ -28,9 +28,7 @@ plotTickLatex2D
 l = legend('Data from MC-simulation','PDF$(r) = 2^5r^2 e^{-4r}$');
 set(l,'Interpreter','latex')
 print(gcf,'-depsc2','distHist.eps')
-%%
-xlabel('Distance to the nucleus', 'fontsize', 12);
-title('Approximated function', 'fontsize', 12);
+
 
 %% Plot energies
 
@@ -46,6 +44,6 @@ plot(energy(:,2), 'r');
 xlabel('Datapoints', 'fontsize', 12);
 ylabel('Energy', 'fontsize', 12);
 
-meanEnergy = mean(energy(:,2))
-
+meanEnergy = mean(energy(:,1))
+%energy(end,2)
 
