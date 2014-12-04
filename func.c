@@ -93,3 +93,121 @@ void get_distances_nucleus(double positions[][3], double distances_nucleus[]){
 	distances_nucleus[1] = sqrt(distances_nucleus[1]);
 }
 
+// Function that caculated the auto-correlation function, the statistical inefficiency
+void error_corr_func(double *A, int length){
+
+	// Declaration and initiation of variables
+	int i, k;
+	double mean = 0;
+	double mean2 = 0;
+	double s = 0;
+	double sigmaTot;
+	int steps = 200;
+
+	// Declaration of arrays
+	double first_term[steps];
+	double corr_func[steps];
+
+	// Initiate the array first_term
+	for(k = 0; k < steps; k++){
+		first_term[k] = 0.0;
+	}
+
+	// Calculate all the expected values of A
+	for(i = 0; i < length-steps; i++){
+		mean += A[i]/(length-steps);
+		mean2 += ((A[i]*A[i])/(length-steps)); 
+	}
+
+	// Calculate the first term
+	for(i = 0; i < (length-steps); i++){
+		for(k = 0; k < steps; k++){
+			first_term[k] += (A[i]*A[i+k])/(length-steps);
+		}
+	}
+
+	// Calculate the correlation function
+	for(k = 0; k < steps; k++){
+		corr_func[k] = ((first_term[k] - (mean*mean))/(mean2 - (mean*mean)));
+	}
+
+	// Calculate the statistical inefficiency
+	i = 0;
+	while(corr_func[i] >= exp(-2)){
+		i++;
+	}
+	
+	s = i;
+
+	sigmaTot = sqrt((mean2 - mean*mean)/steps*s);
+	printf("Statistical inefficiency: %F \n", s);
+	printf("Result: %.5f ± %.5f \n", mean, sigmaTot);
+
+}
+
+// Calculate the statistical inefficiency from the block average
+void error_block_average(double *A, int length){
+
+	// Declaration and initiation of variables
+	int i, j;
+	int block_size;
+	double mean, mean2, var_f;
+	double mean_F, mean2_F, var_F;
+	double s;
+
+	FILE *block;
+	block = fopen("block_s.txt","w");
+
+	fprintf(block,"%f \n", 0);
+	
+	// Calculate statistical inefficiency for different block sizes
+	for(block_size = 10; block_size < 1000; block_size = block_size + 10){
+
+		int nbr_blocks = length/block_size;
+		double block_means[nbr_blocks];
+		double block_means2[nbr_blocks];
+
+		// Determine variance for the whole array
+		mean = 0.0;
+		mean2 = 0.0;	
+		for(i = 0; i < length; i++){
+			mean += A[i]/length;
+			mean2 += A[i]*A[i]/length;
+		}
+
+		var_f = (mean2 - mean*mean);
+		//printf("var: %.10f \n", var_f);
+	
+		// Determine average in each block
+		for(i = 0; i < nbr_blocks; i++){
+			
+			block_means[i] = 0.0;
+			block_means2[i] = 0.0;
+			
+			for(j = 0; j < block_size; j++){
+				block_means[i] += A[(i*block_size+j)]/block_size;
+			}
+		}
+	
+
+		// Determine average in each block
+		mean_F = 0.0;
+		mean2_F = 0.0;
+		for(i = 0; i < nbr_blocks; i++){
+			mean_F += block_means[i]/nbr_blocks;
+			mean2_F += block_means[i]*block_means[i]/nbr_blocks;
+		}
+
+		var_F = (mean2_F - mean_F * mean_F);
+		s = block_size * var_F / var_f;
+		
+		fprintf(block,"%f \n", s);
+
+	}
+
+	printf("Statistical inefficiency: %f \n", s);
+
+	fclose(block);
+
+}
+

@@ -28,7 +28,6 @@ int main(){
 	double p, p_temp; // Probabilities
 	double distance; 
 	double wave_func;
-	double energy_l;
 	double energy_mean;
 	double distances_nucleus[2];
 	
@@ -42,6 +41,7 @@ int main(){
 	N = 100000;
 	throw_away = 20000;
 	energy_mean = 0;
+	double energy_l[N + 1];
 
 	// Seed for generating random numbers
 	srand(time(NULL));
@@ -60,8 +60,8 @@ int main(){
 	wave_func = get_wavefunction(positions, alpha, distance);
 
 	// Get energies for initial configuration
-	energy_l = get_local_e(positions, alpha);
-	energy_mean += energy_l;
+	energy_l[0] = get_local_e(positions, alpha);
+	energy_mean += energy_l[0];
 
 	// Calculate the probability (Not normalized)
 	p = pow(wave_func, 2);
@@ -80,10 +80,9 @@ int main(){
 	// Save initial distances to nucleus + energy
 	fprintf(m_file,"%f \n", distances_nucleus[0]);
 	fprintf(m_file,"%f \n", distances_nucleus[1]);
-	//fprintf(e_file,"%f \t %f \n", energy_l, energy_mean);
 
 	// Main for-loop
-	for(j = 1; j < N; j++){
+	for(j = 1; j < N + 1; j++){
 
 		// Generate random numbers and get next configuration
 		for(i = 0; i < 3; i++){
@@ -130,11 +129,15 @@ int main(){
 		}
 
 		// Get energies for the current configuration
-		energy_l = get_local_e(positions, alpha);
-		energy_mean += energy_l;
+		energy_l[j] = get_local_e(positions, alpha);
+		energy_mean += energy_l[j];
 
 		// Skip the 'throw_away' first datapoints
 		if(j > throw_away){
+
+			
+			sum += 1;
+			sum2 += 1;
 
 			// Get distances to nucleus
 			get_distances_nucleus(positions, distances_nucleus);
@@ -144,17 +147,18 @@ int main(){
 			fprintf(m_file,"%f \n", distances_nucleus[1]);
 
 			// Save current energies
-			fprintf(e_file,"%f \t %f \n", energy_l, energy_mean/(j+1));
+			fprintf(e_file,"%f \t %f \n", energy_l[j], energy_mean/(j+1));
 
 		}
 		
 	}
 
-	// Get the means to calculate the variance
-	mean = sum/(N-throw_away-1);
-	mean2 = sum2/(N-throw_away-1);
-	var = (mean2 - mean*mean)/(N-throw_away-1);	
-	
+	// Get statistical inefficiency from the correlation function
+	error_corr_func(energy_l, N + 1);
+
+	// Get statistical inefficiency from block averaging
+	error_block_average(energy_l, N + 1);
+
 	// In the terminal, print how many rejections
 	printf("Tot nbr iteration: %i \t Nbr eq iterations: %i \n", N, throw_away);
 	printf("Nbr rejections: %i \n", N-norejection);
