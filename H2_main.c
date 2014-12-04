@@ -12,7 +12,7 @@ Main program for a variational Monte Carlo simulation of a helium atom.
 
 // Main program 
 int main(){
-
+	printf("Initiation");
 	// Declaration of variables and arrays
 	int i, j;
 	double sum, sum2;
@@ -27,7 +27,7 @@ int main(){
 	double temp[2][3]; // Temporary array for new positions
 	double p[2][3]; // Probabilities
 	double distance; 
-
+	
 	// Initialize variables
 	sum = 0;
 	sum2 = 0;
@@ -37,6 +37,8 @@ int main(){
 	norejection = 0;
 	alpha = 0.1;
 	N = 10000;
+
+	srand(time(NULL));
 
 	// Initialize positions
 	for(i = 0; i < 3; i++){
@@ -56,7 +58,7 @@ int main(){
 
 	// Save initial positions
 	fprintf(m_file,"%F \n", distance);
-
+	
 	// Calculate the integral
 	for(j = 1; j < N; j++){
 
@@ -70,26 +72,37 @@ int main(){
 		}
 
 		// Calculate distance between the particles
-		distance = 1;//getDistance(positions);
+		distance = getDistance(positions);
 
 		// Calculate the probability
 		p[0][j] = sin(PI * distance);
 		q = p[0][j]/p[0][j-1];
+		
+		// If q > 1 all trials will be accepted
+		if (q < 1){
 
-		// New random number
-		random = (double) rand() / (double) RAND_MAX;
+			// New random number
+			random = (double) rand() / (double) RAND_MAX;
 
-		// Trial, if q >= random, save the temporary positions
-		if(q >= random){
+			// Trial, if q >= random, save the temporary positions
+			if(q >= random){
+				for(i = 0; i < 3; i++){
+					positions[0][i] = temp[0][i];
+					positions[1][i] = temp[1][i];
+				}	
+				p[0][j] = p[0][j-1];
+				norejection++;
+				}
+		}
+		else{
 			for(i = 0; i < 3; i++){
-				positions[0][i] = temp[0][i];
-				positions[1][i] = temp[1][i];
-			}
-
+					positions[0][i] = temp[0][i];
+					positions[1][i] = temp[1][i];
+			}	
 			p[0][j] = p[0][j-1];
 			norejection++;
+
 		}
-		
 		// Skip the 'throw_away' first datapoints
 		if(j > throw_away){
 			sum += distance * (1-distance) * 2.0 / sin(PI * distance) / PI;
