@@ -45,3 +45,7 @@ hold on
 plot(energy(:,2), 'r');
 xlabel('Datapoints', 'fontsize', 12);
 ylabel('Energy', 'fontsize', 12);
+
+meanEnergy = mean(energy(:,2))
+
+
