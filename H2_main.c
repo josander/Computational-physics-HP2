@@ -90,10 +90,10 @@ int main(){
 		}
 
 		// Calculate distance between the particles
-		distance = getDistance(positions);
+		distance = getDistance(temp);
 
 		// Get wave function
-		wave_func = get_wavefunction(positions, alpha, distance);
+		wave_func = get_wavefunction(temp, alpha, distance);
 
 		// Calculate the probability
 		p_temp = pow(wave_func,2);
