@@ -157,7 +157,7 @@ void error_block_average(double *A, int length){
 
 	// Create file to save data
 	FILE *block;
-	block = fopen("block_s.txt","w");
+	block = fopen("block_s.data","w");
 
 	fprintf(block,"%f \n", 0);
 	
