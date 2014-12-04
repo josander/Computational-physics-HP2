@@ -36,10 +36,10 @@ int main(){
 	sum2 = 0;
 	var = 0;
 	delta = 1.0;
-	throw_away = 0;
 	norejection = 0;
 	alpha = 0.1;
 	N = 100000;
+	throw_away = 0;
 
 	srand(time(NULL));
 
@@ -122,16 +122,16 @@ int main(){
 		}
 		// Skip the 'throw_away' first datapoints
 		if(j > throw_away){
-			//sum += distance * (1-distance) * 2.0 / sin(PI * distance) / PI;
-			//sum2 += distance * (1-distance) * 2.0 / sin(PI * distance) / PI * distance * (1-distance) * 2.0 / sin(PI * distance) / PI;
+
+			// Get distances to nucleus
+			get_distances_nucleus(positions, distances_nucleus);
+
+			// Save initial distances to nucleus
+			fprintf(m_file,"%f \n", distances_nucleus[0]);
+			fprintf(m_file,"%f \n", distances_nucleus[1]);
+
 		}
 
-		// Get distances to nucleus
-		get_distances_nucleus(positions, distances_nucleus);
-
-		// Save initial distances to nucleus
-		fprintf(m_file,"%f \n", distances_nucleus[0]);
-		fprintf(m_file,"%f \n", distances_nucleus[1]);
 
 	}
 
