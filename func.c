@@ -49,7 +49,8 @@ double getLocalE(double position[][3], double alfa){
 	}
 
 	double E = -4 + vector*distInv*pow(alfaDistInv,2) - distInv*pow(alfaDistInv,3) -0.25*pow(alfaDistInv,4) + distInv;
-	return(E);  		 
+	return(E);
+}  		 
 
 double get_wavefunction(double positions[][3], double alpha, double distance){
 
