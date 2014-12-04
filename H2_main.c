@@ -40,7 +40,7 @@ int main(){
 	norejection = 0;
 	alpha = 0.1;
 	N = 100000;
-	throw_away = 0;
+	throw_away = 20000;
 	energy_mean = 0;
 
 	// Seed for generating random numbers
@@ -80,7 +80,7 @@ int main(){
 	// Save initial distances to nucleus + energy
 	fprintf(m_file,"%f \n", distances_nucleus[0]);
 	fprintf(m_file,"%f \n", distances_nucleus[1]);
-	fprintf(e_file,"%f \t %f \n", energy_l, energy_mean);
+	//fprintf(e_file,"%f \t %f \n", energy_l, energy_mean);
 
 	// Main for-loop
 	for(j = 1; j < N; j++){
@@ -128,6 +128,11 @@ int main(){
 			norejection++;
 
 		}
+
+		// Get energies for the current configuration
+		energy_l = get_local_e(positions, alpha);
+		energy_mean += energy_l;
+
 		// Skip the 'throw_away' first datapoints
 		if(j > throw_away){
 
@@ -137,10 +142,6 @@ int main(){
 			// Save distances to nucleus
 			fprintf(m_file,"%f \n", distances_nucleus[0]);
 			fprintf(m_file,"%f \n", distances_nucleus[1]);
-
-			// Get energies for the current configuration
-			energy_l = get_local_e(positions, alpha);
-			energy_mean += energy_l;
 
 			// Save current energies
 			fprintf(e_file,"%f \t %f \n", energy_l, energy_mean/(j+1));
@@ -155,7 +156,8 @@ int main(){
 	var = (mean2 - mean*mean)/(N-throw_away-1);	
 	
 	// In the terminal, print how many rejections
-	printf("Nbr iteration: %i \t Nbr rejections: %i \n", N, N-norejection);
+	printf("Tot nbr iteration: %i \t Nbr eq iterations: %i \n", N, throw_away);
+	printf("Nbr rejections: %i \n", N-norejection);
 
 	// Close the data-files
 	fclose(m_file); 
