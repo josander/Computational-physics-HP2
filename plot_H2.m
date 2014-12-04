@@ -27,8 +27,10 @@ title('Approximated function', 'fontsize', 12);
 
 %% Plot energies
 
+% Import energy data
 energy = importdata('energy.data');
 
+% Plot data
 figure(2);
 clf
 plot(energy(:,1), 'b');
