@@ -35,8 +35,8 @@ int main(){
 	sum = 0;
 	sum2 = 0;
 	var = 0;
-	delta = 0.65;
-	throw_away = 2000;
+	delta = 1.0;
+	throw_away = 0;
 	norejection = 0;
 	alpha = 0.1;
 	N = 100000;
@@ -52,19 +52,15 @@ int main(){
 	
 	// Get initial distances
 	distance = getDistance(positions);
-	printf("Dist: %f \n", distance);
 
 	// Get wave function
 	wave_func = get_wavefunction(positions, alpha, distance);
-	printf("W: %f \n", wave_func);
 
 	// Get wave function
-	energy = get_local_e(positions, alpha);
-	printf("E: %f \n", energy);
+	energy = get_local_e(positions, alpha);;
 
 	// Calculate the probability (Not normalized)
 	p = pow(wave_func, 2);
-	printf("P: %f \n", p);
 
 	// Open a file to print the variable x in
 	FILE *m_file;
@@ -144,8 +140,8 @@ int main(){
 	mean2 = sum2/(N-throw_away-1);
 	var = (mean2 - mean*mean)/(N-throw_away-1);	
 	
-	// In the terminal, print how many throw aways
-	printf("Nbr of rejections: %i \n", N-norejection);
+	// In the terminal, print how many rejections
+	printf("Nbr iteration: %i \t Nbr rejections: %i \n", N, N-norejection);
 
 	// Close the data-file
 	fclose(m_file); 

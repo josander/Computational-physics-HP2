@@ -32,18 +32,19 @@ double get_local_e(double position[][3], double alfa){
 	int i;
 	double distance = getDistance(position);
 	double alfaDist = 1 + alfa*distance;
-	
 	double distInv = 1/distance;
 	double alfaDistInv = 1/alfaDist;
-
 	double vector = 0;	
 	double magnitude[2] = {0,0};	
+
 	for(i = 0; i < 3; i++){
 		magnitude[0] += position[0][i]*position[0][i];
 		magnitude[1] += position[1][i]*position[1][i];
 	}
+
 	magnitude[0] = 1/sqrt(magnitude[0]);
 	magnitude[1] = 1/sqrt(magnitude[1]);
+
 	for(i = 0; i < 3; i++){
 		vector += (position[0][i]*magnitude[0] - position[1][i]*magnitude[1])*(position[0][i] - position[1][i]);
 	}
