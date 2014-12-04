@@ -156,7 +156,8 @@ int main(){
 	var = (mean2 - mean*mean)/(N-throw_away-1);	
 	
 	// In the terminal, print how many rejections
-	printf("Nbr iteration: %i \t Nbr rejections: %i \n", N - throw_away, N-norejection);
+	printf("Tot nbr iteration: %i \t Nbr eq iterations: %i \n", N, throw_away);
+	printf("Nbr rejections: %i \n", N-norejection);
 
 	// Close the data-files
 	fclose(m_file); 
