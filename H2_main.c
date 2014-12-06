@@ -30,6 +30,7 @@ int main(){
 	double wave_func;
 	double energy_mean;
 	double distances_nucleus[2];
+	int iteration; // Iteration number fot rescaling alpha
 	
 	// Initialize variables
 	sum = 0;
@@ -37,11 +38,12 @@ int main(){
 	var = 0;
 	delta = 0.967;
 	alpha = 0;
-	alpha_start = 0.05;
-	alpha_stop = 0.25;
+	alpha_start = 0.1;
+	alpha_stop = 0.1;
 	N = 100000;
 	throw_away = 50000;
 	double energy_l[N + 1];
+	double gradWave[N + 1];
 
 	// Seed for generating random numbers
 	srand(time(NULL));
@@ -173,7 +175,7 @@ int main(){
 		printf("Nbr rejections: %i \n", N-norejection);
 
 		// Print loop finished-line
-		printf("**************************************\n");
+		printf("***********************************\n");
 	}
 
 	// Close the data-files

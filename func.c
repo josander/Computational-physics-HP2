@@ -218,3 +218,26 @@ void error_block_average(double *A, int length){
 	fclose(block);
 }
 
+double rescale_alpha(double alpha, double energy_l[], double energy_mean, double positions[][3], double distance, int iteration){
+	
+	int i;
+	double grad, gamma;
+	double A = 1;
+	double beta = 0.75; // Shouble be (0.5,1]
+	double first_term, second_term;
+
+	gamma = A * pow(iteration, - beta);
+
+	for(i = 0; i < iteration; i++){
+		first_term += energy_l[i] * 1;
+	}
+
+	second_term += 1;
+
+	grad = 2 * (first_term - second_term);
+
+	alpha = alpha - gamma * grad;
+
+	return alpha;
+}
+
