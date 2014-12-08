@@ -15,14 +15,13 @@ int main(){
 
 	// Declaration of variables and arrays
 	int i, j;
-	double sum, sum2;
 	int N; // Number of interations
 	double mean, mean2, var; // <f>, <f^2> and var[f]
 	double delta;
 	double q;
 	int throw_away, norejection; // Number of iterations to throw away in the begining, number of rejections
 	double random; // Random number [0,1]
-	double alpha_start, alpha_stop, alpha;
+	double alpha_start, alpha_stop, alpha, new_alpha;
 	double positions[2][3]; // Positions in 3D for 2 particles
 	double temp[2][3]; // Temporary array for new positions
 	double p, p_temp; // Probabilities
@@ -33,8 +32,6 @@ int main(){
 	int iteration; // Iteration number fot rescaling alpha
 	
 	// Initialize variables
-	sum = 0;
-	sum2 = 0;
 	var = 0;
 	delta = 0.967;
 	alpha = 0;
@@ -92,6 +89,9 @@ int main(){
 		fprintf(m_file,"%f \n", distances_nucleus[0]);
 		fprintf(m_file,"%f \n", distances_nucleus[1]);
 
+		// Initiate new_alpha
+		new_alpha = alpha;
+
 		// Main for-loop
 		for(j = 1; j < N + 1; j++){
 
@@ -108,7 +108,7 @@ int main(){
 			distance = getDistance(temp);
 
 			// Get wave function
-			wave_func = get_wavefunction(temp, alpha, distance);
+			wave_func = get_wavefunction(temp, new_alpha, distance);
 
 			// Calculate the probability
 			p_temp = pow(wave_func,2);
@@ -139,22 +139,25 @@ int main(){
 
 			}
 
+			// Calculate distance between the particles
+			distance = getDistance(positions);
+
 			// Get energies for the current configuration
-			energy_l[j] = get_local_e(positions, alpha);
+			energy_l[j] = get_local_e(positions, new_alpha);
 			energy_mean += energy_l[j];
 
 			// Get the gradient of ln(wavefunction) with respect to alpha
-			grad_ln_wave[j] = get_grad_ln_wave(distance, alpha);
+			grad_ln_wave[j] = get_grad_ln_wave(distance, new_alpha);
+			//printf("grad ln wave: %f \n", grad_ln_wave[j]);
 
+			if(j > 50){
 			// Rescale alpha
-			alpha = rescale_alpha(alpha, energy_l, grad_ln_wave, distance, j);
+			new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j);
+
+			}
 
 			// Skip the 'throw_away' first datapoints
 			if(j > throw_away){
-
-			
-				sum += 1;
-				sum2 += 1;
 
 				// Get distances to nucleus
 				get_distances_nucleus(positions, distances_nucleus);
@@ -164,7 +167,7 @@ int main(){
 				fprintf(m_file,"%f \n", distances_nucleus[1]);
 
 				// Save current energies
-				fprintf(e_file,"%f \t %f \n", energy_l[j], energy_mean/(j+1));
+				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j], energy_mean/(j+1), new_alpha);
 
 			}
 		
