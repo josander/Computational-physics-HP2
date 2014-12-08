@@ -218,6 +218,19 @@ void error_block_average(double *A, int length){
 	fclose(block);
 }
 
+// Function that returns the gradient of the ln(wavefunction) with respect to alpha
+double get_grad_ln_wave(double distance, double alpha){
+	
+	double grad_ln_wave;
+
+	grad_ln_wave = -distance * distance / pow(1 + alpha * distance, 2);
+	printf("Grad: %f \n", grad_ln_wave);
+
+	return grad_ln_wave;
+
+}
+
+// Function that rescales the alpha-value
 double rescale_alpha(double alpha, double energy_l[], double energy_mean, double positions[][3], double distance, int iteration){
 	
 	int i;

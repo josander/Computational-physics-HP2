@@ -43,7 +43,7 @@ int main(){
 	N = 100000;
 	throw_away = 50000;
 	double energy_l[N + 1];
-	double gradWave[N + 1];
+	double grad_ln_wave[N + 1];
 
 	// Seed for generating random numbers
 	srand(time(NULL));
@@ -142,6 +142,12 @@ int main(){
 			// Get energies for the current configuration
 			energy_l[j] = get_local_e(positions, alpha);
 			energy_mean += energy_l[j];
+
+			// Get the gradient of ln(wavefunction) with respect to alpha
+			grad_ln_wave[j] = get_grad_ln_wave(distance, alpha);
+
+			// Rescale alpha
+			alpha = rescale_alpha(alpha, energy_l, energy_mean, positions, distance, j);
 
 			// Skip the 'throw_away' first datapoints
 			if(j > throw_away){
