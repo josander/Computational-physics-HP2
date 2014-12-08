@@ -147,7 +147,7 @@ int main(){
 			grad_ln_wave[j] = get_grad_ln_wave(distance, alpha);
 
 			// Rescale alpha
-			alpha = rescale_alpha(alpha, energy_l, energy_mean, positions, distance, j);
+			alpha = rescale_alpha(alpha, energy_l, grad_ln_wave, distance, j);
 
 			// Skip the 'throw_away' first datapoints
 			if(j > throw_away){
