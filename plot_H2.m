@@ -48,9 +48,38 @@ ylabel('Energy', 'fontsize', 12);
 
 meanEnergy = mean(energy(:,2))
 
+%% Plot alpha
+
+figure(3);
+plot(energy(:,3));
+xlabel('Datapoints', 'fontsize', 12);
+ylabel('Alpha', 'fontsize', 12);
+
+%% Corr func
+
+% import data
+data = importdata('energy.data');
+numlags = 200;
+corr = autocorr(data(:,1), numlags);
+
+% find statistical inefficiency
+i = 1;
+while corr(i) >= exp(-2)
+   i = i + 1;
+end
+
+% Since no 0 index
+statistical_inefficiency = i - 1
+
+% plot
+figure(4);
+subplot(1,1,1)
+plot(0:numlags,corr, [0 numlags], [exp(-2) exp(-2)], i, corr(i),'x');
+title('Auto-correlation function','fontsize',12);
+xlabel('Lags','fontsize',12);
+
 %% Block averaging
 
-clc
 
 % import data
 block = importdata('block_s.data');
@@ -60,7 +89,7 @@ blockLength = 500;
 statistical_inefficiency = mean(block(blockLength/20:blockLength/10))
 
 % plot
-figure(3);
+figure(5);
 plot(0:10:blockLength-10,block,'o', [0 blockLength], [statistical_inefficiency statistical_inefficiency]);
 xlabel('Blocksize','fontsize',12);
 ylabel('Statistical inefficiency','fontsize',12);

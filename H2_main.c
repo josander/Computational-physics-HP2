@@ -39,8 +39,10 @@ int main(){
 	alpha_stop = 0.1;
 	N = 100000;
 	throw_away = 50000;
-	double energy_l[N + 1];
-	double grad_ln_wave[N + 1];
+
+	// Allocate memory for big arrays
+	double *energy_l = malloc((N + 1) * sizeof(double));
+	double *grad_ln_wave = malloc((N + 1) * sizeof(double));
 
 	// Seed for generating random numbers
 	srand(time(NULL));
@@ -190,4 +192,7 @@ int main(){
 	// Close the data-files
 	fclose(m_file); 
 	fclose(e_file);
+
+	free(energy_l); free(grad_ln_wave);
+	energy_l = NULL; grad_ln_wave = NULL;
 }
