@@ -218,3 +218,47 @@ void error_block_average(double *A, int length){
 	fclose(block);
 }
 
+// Function that returns the gradient of the ln(wavefunction) with respect to alpha
+double get_grad_ln_wave(double distance, double alpha){
+	
+	double grad_ln_wave;
+
+	grad_ln_wave = -distance * distance / pow(1 + alpha * distance, 2);
+
+	return grad_ln_wave;
+
+}
+
+// Function that rescales the alpha-value
+double rescale_alpha(double alpha, double energy_l[], double grad_ln_wave[], double distance, int iteration){
+	
+	int i;
+	double grad, gamma;
+	double A = 1.0;
+	double beta = 0.75; // Shouble be (0.5,1]
+	double first_term, second_term, second_term_1, second_term_2;
+	double new_alpha;
+
+	gamma = A * pow(iteration, - beta);
+
+	for(i = 0; i < iteration; i++){
+		first_term += (energy_l[i] * grad_ln_wave[i]);
+		second_term_1 += energy_l[i];
+		second_term_2 += grad_ln_wave[i];
+	}
+
+	first_term = (double) first_term / iteration;
+	second_term = (double) second_term_1 * second_term_2 / pow(iteration,2);
+
+	grad = 2.0 * (first_term - second_term);
+
+	new_alpha = alpha - (gamma * grad);
+
+	/*if(iteration < 70){
+		printf("energyL: %f \t grad ln: %f \n",energy_l[2],grad_ln_wave[2]);
+		printf("gamma: %.3f \tGrad: %.3f \tfirst: %.3f \tsecond: %.3f \told %.3f \tnew %.3f\n", gamma, grad, first_term, second_term, alpha, new_alpha);
+	}*/
+
+	return new_alpha;
+}
+

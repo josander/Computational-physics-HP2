@@ -15,14 +15,13 @@ int main(){
 
 	// Declaration of variables and arrays
 	int i, j;
-	double sum, sum2;
 	int N; // Number of interations
 	double mean, mean2, var; // <f>, <f^2> and var[f]
 	double delta;
 	double q;
 	int throw_away, norejection; // Number of iterations to throw away in the begining, number of rejections
 	double random; // Random number [0,1]
-	double alpha_start, alpha_stop, alpha;
+	double alpha_start, alpha_stop, alpha, new_alpha;
 	double positions[2][3]; // Positions in 3D for 2 particles
 	double temp[2][3]; // Temporary array for new positions
 	double p, p_temp; // Probabilities
@@ -30,32 +29,34 @@ int main(){
 	double wave_func;
 	double energy_mean;
 	double distances_nucleus[2];
+	int iteration; // Iteration number fot rescaling alpha
 	
 	// Initialize variables
-	sum = 0;
-	sum2 = 0;
 	var = 0;
 	delta = 0.967;
 	alpha = 0;
-	alpha_start = 0.05;
-	alpha_stop = 0.25;
-	N = 100000;
+	alpha_start = 0.10;
+	alpha_stop = 0.20;
+	N = 200000;
 	throw_away = 50000;
-	double energy_l[N + 1];
+
+	// Allocate memory for big arrays
+	double *energy_l = malloc((N + 1) * sizeof(double));
+	double *grad_ln_wave = malloc((N + 1) * sizeof(double));
 
 	// Seed for generating random numbers
 	srand(time(NULL));
 
-	// Open a file to print the variable x in
+	// Open a file to print the distance in
 	FILE *m_file;		
 	m_file = fopen("distances.data","w");
 
-	// Open a file to print the variable x in
+	// Open a file to print the energy and the alpha value
 	FILE *e_file;
 	e_file = fopen("energy.data","w");
 
 	// Perform the simulation for different alpha values
-	for(alpha = alpha_start; alpha <= alpha_stop; alpha = alpha + 0.05){
+	for(alpha = alpha_start; alpha <= alpha_stop; alpha = alpha + 0.025){
 
 		// Initiation for each new loop
 		norejection = 0;
@@ -90,6 +91,9 @@ int main(){
 		fprintf(m_file,"%f \n", distances_nucleus[0]);
 		fprintf(m_file,"%f \n", distances_nucleus[1]);
 
+		// Initiate new_alpha
+		new_alpha = alpha;
+
 		// Main for-loop
 		for(j = 1; j < N + 1; j++){
 
@@ -106,7 +110,7 @@ int main(){
 			distance = getDistance(temp);
 
 			// Get wave function
-			wave_func = get_wavefunction(temp, alpha, distance);
+			wave_func = get_wavefunction(temp, new_alpha, distance);
 
 			// Calculate the probability
 			p_temp = pow(wave_func,2);
@@ -137,16 +141,24 @@ int main(){
 
 			}
 
+			// Calculate distance between the particles
+			distance = getDistance(positions);
+
 			// Get energies for the current configuration
-			energy_l[j] = get_local_e(positions, alpha);
+			energy_l[j] = get_local_e(positions, new_alpha);
 			energy_mean += energy_l[j];
+
+			// Get the gradient of ln(wavefunction) with respect to alpha
+			grad_ln_wave[j] = get_grad_ln_wave(distance, new_alpha);
+			//printf("grad ln wave: %f \n", grad_ln_wave[j]);
+
+			if(j > 200){
+				// Rescale alpha
+				new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j);
+			}
 
 			// Skip the 'throw_away' first datapoints
 			if(j > throw_away){
-
-			
-				sum += 1;
-				sum2 += 1;
 
 				// Get distances to nucleus
 				get_distances_nucleus(positions, distances_nucleus);
@@ -156,8 +168,12 @@ int main(){
 				fprintf(m_file,"%f \n", distances_nucleus[1]);
 
 				// Save current energies
-				fprintf(e_file,"%f \t %f \n", energy_l[j], energy_mean/(j+1));
+				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j], energy_mean/(j+1), new_alpha);
 
+			}
+
+			if(j%50000 == 0){
+				printf("%i out of %i steps\n", j, N);
 			}
 		
 		}
@@ -170,13 +186,16 @@ int main(){
 
 		// In the terminal, print how many rejections
 		printf("Tot nbr iteration: %i \nNbr eq iterations: %i \n", N, throw_away);
-		printf("Nbr rejections: %i \n", N-norejection);
+		printf("Nbr rejections: %i \nLast alpha: %f\n", N-norejection, new_alpha);
 
 		// Print loop finished-line
-		printf("**************************************\n");
+		printf("***********************************\n");
 	}
 
 	// Close the data-files
 	fclose(m_file); 
 	fclose(e_file);
+
+	free(energy_l); free(grad_ln_wave);
+	energy_l = NULL; grad_ln_wave = NULL;
 }
