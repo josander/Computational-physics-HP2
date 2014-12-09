@@ -26,14 +26,14 @@ double getDistance(double positions [][3]){
 }
 
 
-// Function that calculates the local energy given position and alfa-parameter
-double get_local_e(double position[][3], double alfa){
+// Function that calculates the local energy given position and alpha-parameter
+double get_local_e(double position[][3], double alpha){
 
 	int i;
 	double distance = getDistance(position);
-	double alfaDist = 1 + alfa*distance;
+	double alphaDist = 1 + alpha*distance;
 	double distInv = 1/distance;
-	double alfaDistInv = 1/alfaDist;
+	double alphaDistInv = 1/alphaDist;
 	double vector = 0;	
 	double magnitude[2] = {0,0};	
 
@@ -49,7 +49,7 @@ double get_local_e(double position[][3], double alfa){
 		vector += (position[0][i]*magnitude[0] - position[1][i]*magnitude[1])*(position[0][i] - position[1][i]);
 	}
 
-	double E = -4 + vector*distInv*pow(alfaDistInv,2) - distInv*pow(alfaDistInv,3) -0.25*pow(alfaDistInv,4) + distInv;
+	double E = -4 + vector*distInv*pow(alphaDistInv,2) - distInv*pow(alphaDistInv,3) -0.25*pow(alphaDistInv,4) + distInv;
 	return(E);
 }  		 
 
@@ -251,11 +251,6 @@ double rescale_alpha(double alpha, double energy_l[], double grad_ln_wave[], dou
 	grad = 2.0 * (first_term - second_term);
 
 	new_alpha = alpha - (gamma * grad);
-
-	/*if(iteration < 70){
-		printf("energyL: %f \t grad ln: %f \n",energy_l[2],grad_ln_wave[2]);
-		printf("gamma: %.3f \tGrad: %.3f \tfirst: %.3f \tsecond: %.3f \told %.3f \tnew %.3f\n", gamma, grad, first_term, second_term, alpha, new_alpha);
-	}*/
 
 	return new_alpha;
 }
