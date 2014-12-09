@@ -35,8 +35,8 @@ int main(){
 	var = 0;
 	delta = 0.967;
 	alpha = 0;
-	alpha_start = 0.10;
-	alpha_stop = 0.10;
+	alpha_start = 0.05;
+	alpha_stop = 0.25;
 	N = 500000;
 	throw_away = 0;
 
@@ -70,6 +70,16 @@ int main(){
 			positions[0][i] = 1.0;
 			positions[1][i] = -1.0;
 		}
+
+		// Generate random numbers to get small displacements in the initial configuration
+		for(i = 0; i < 3; i++){
+			random = (double) rand() / (double) RAND_MAX;	
+			temp[0][i] = positions[0][i] + delta*(random - 0.5);
+
+			random = (double) rand() / (double) RAND_MAX;	
+			temp[1][i] = positions[1][i] + delta*(random - 0.5);
+		}
+
 
 		// Get initial distances
 		distance = getDistance(positions);
@@ -153,7 +163,6 @@ int main(){
 				// Get the gradient of ln(wavefunction) with respect to alpha
 				grad_ln_wave[j - throw_away - 1] = get_grad_ln_wave(distance, new_alpha);
 
-
 				// Get distances to nucleus
 				get_distances_nucleus(positions, distances_nucleus);
 
@@ -169,8 +178,9 @@ int main(){
 
 			}
 
+			// For each 5000nd iteration, print 
 			if(j%50000 == 0){
-				printf("%i out of %i steps\n", j, N);
+				//printf("%i out of %i steps\n", j, N);
 			}
 		
 		}
@@ -196,3 +206,4 @@ int main(){
 	free(energy_l); free(grad_ln_wave);
 	energy_l = NULL; grad_ln_wave = NULL;
 }
+
