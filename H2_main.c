@@ -36,8 +36,8 @@ int main(){
 	delta = 0.967;
 	alpha = 0;
 	alpha_start = 0.10;
-	alpha_stop = 0.20;
-	N = 200000;
+	alpha_stop = 0.10;
+	N = 500000;
 	throw_away = 50000;
 
 	// Allocate memory for big arrays
@@ -150,12 +150,6 @@ int main(){
 
 			// Get the gradient of ln(wavefunction) with respect to alpha
 			grad_ln_wave[j] = get_grad_ln_wave(distance, new_alpha);
-			//printf("grad ln wave: %f \n", grad_ln_wave[j]);
-
-			if(j > 200){
-				// Rescale alpha
-				new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j);
-			}
 
 			// Skip the 'throw_away' first datapoints
 			if(j > throw_away){
@@ -169,6 +163,9 @@ int main(){
 
 				// Save current energies
 				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j], energy_mean/(j+1), new_alpha);
+
+				// Rescale alpha
+				new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j);
 
 			}
 
