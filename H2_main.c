@@ -14,7 +14,7 @@ Main program for a variational Monte Carlo simulation of a helium atom.
 int main(){
 
 	// Declaration of variables and arrays
-	int i, j;
+	int i, j, n;
 	int N; // Number of interations
 	double mean, mean2, var; // <f>, <f^2> and var[f]
 	double delta;
@@ -39,6 +39,7 @@ int main(){
 	alpha_stop = 0.10;
 	N = 500000;
 	throw_away = 50000;
+	n = 0;
 
 	// Allocate memory for big arrays
 	double *energy_l = malloc((N + 1) * sizeof(double));
@@ -76,10 +77,6 @@ int main(){
 
 		// Get wave function
 		wave_func = get_wavefunction(positions, alpha, distance);
-
-		// Get energies for initial configuration
-		energy_l[0] = get_local_e(positions, alpha);
-		energy_mean += energy_l[0];
 
 		// Calculate the probability (Not normalized)
 		p = pow(wave_func, 2);
@@ -150,8 +147,9 @@ int main(){
 			// Skip the 'throw_away' first datapoints
 			if(j > throw_away){
 
-				// Get energies for the current configuration
+				n++;
 
+				// Get energies for the current configuration
 				energy_l[j - throw_away - 1] = get_local_e(positions, new_alpha);
 				energy_mean += energy_l[j - throw_away - 1];
 
@@ -167,26 +165,26 @@ int main(){
 				fprintf(m_file,"%f \n", distances_nucleus[1]);
 
 				// Save current energies
-				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j], energy_mean/(j+1), new_alpha);
+				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j - throw_away - 1], energy_mean/(j - throw_away), new_alpha);
 
 				// Rescale alpha
-				new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away );
+				new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);
 
 			}
 
 			if(j%50000 == 0){
 				printf("%i out of %i steps\n", j, N);
-				printf("Alpha: %f \n", new_alpha);
+				printf("Alpha: %f \t terms: %i \t index: %i \n", new_alpha, n, j - throw_away-1);
 
 			}
 		
 		}
 
 		// Get statistical inefficiency from the correlation function
-		error_corr_func(energy_l, N + 1);
+		error_corr_func(energy_l, N + 1 - throw_away);
 
 		// Get statistical inefficiency from block averaging
-		error_block_average(energy_l, N + 1);
+		error_block_average(energy_l, N + 1 - throw_away);
 
 		// In the terminal, print how many rejections
 		printf("Tot nbr iteration: %i \nNbr eq iterations: %i \n", N, throw_away);
