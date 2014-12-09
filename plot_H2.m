@@ -44,10 +44,7 @@ plot(energy(:,2), 'r');
 xlabel('Datapoints', 'fontsize', 12);
 ylabel('Energy', 'fontsize', 12);
 
-<<<<<<< HEAD
-meanEnergy = mean(energy(:,1))
-%energy(end,2)
-=======
+
 meanEnergy = mean(energy(:,2))
 
 %% Plot alpha

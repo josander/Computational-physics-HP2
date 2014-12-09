@@ -9,7 +9,7 @@ Contains functions for homeproblem 2/b
 #include <math.h>
 #define PI 3.141592653589
 
-// Function that returns a distance between two particles
+// Function that returns a distance between the two particles
 double getDistance(double positions [][3]){
 	
 	double distance = 0;
@@ -169,7 +169,6 @@ void error_block_average(double *A, int length){
 		int nbr_blocks = length/block_size;
 		double block_means[nbr_blocks];
 		double block_means2[nbr_blocks];
-		double mean_s = 0;
 
 		// Determine variance for the whole array
 		mean = 0.0;
@@ -205,8 +204,7 @@ void error_block_average(double *A, int length){
 		var_F = (mean2_F - mean_F * mean_F);
 		s = block_size * var_F / var_f;
 
-		if(block_size)
-		mean_s += s;
+
 		
 		fprintf(block,"%f \n", s);
 
@@ -239,7 +237,7 @@ double rescale_alpha(double alpha, double energy_l[], double grad_ln_wave[], dou
 	double first_term, second_term, second_term_1, second_term_2;
 	double new_alpha;
 
-	gamma = A * pow(iteration, - beta);
+	gamma = A * pow(iteration, -1*beta);
 
 	for(i = 0; i < iteration; i++){
 		first_term += (energy_l[i] * grad_ln_wave[i]);
