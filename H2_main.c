@@ -144,15 +144,20 @@ int main(){
 			// Calculate distance between the particles
 			distance = getDistance(positions);
 
-			// Get energies for the current configuration
-			energy_l[j] = get_local_e(positions, new_alpha);
-			energy_mean += energy_l[j];
-
 			// Get the gradient of ln(wavefunction) with respect to alpha
 			grad_ln_wave[j] = get_grad_ln_wave(distance, new_alpha);
 
 			// Skip the 'throw_away' first datapoints
 			if(j > throw_away){
+
+				// Get energies for the current configuration
+
+				energy_l[j - throw_away - 1] = get_local_e(positions, new_alpha);
+				energy_mean += energy_l[j - throw_away - 1];
+
+				// Get the gradient of ln(wavefunction) with respect to alpha
+				grad_ln_wave[j - throw_away - 1] = get_grad_ln_wave(distance, new_alpha);
+
 
 				// Get distances to nucleus
 				get_distances_nucleus(positions, distances_nucleus);
@@ -165,12 +170,14 @@ int main(){
 				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j], energy_mean/(j+1), new_alpha);
 
 				// Rescale alpha
-				new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j);
+				new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away );
 
 			}
 
 			if(j%50000 == 0){
 				printf("%i out of %i steps\n", j, N);
+				printf("Alpha: %f \n", new_alpha);
+
 			}
 		
 		}
