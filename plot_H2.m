@@ -35,7 +35,7 @@ print(gcf,'-depsc2','distHist.eps')
 % Import energy data
 energy = importdata('energy.data');
 %%
-set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
+
 
 % Plot data
 figure(2);
@@ -45,7 +45,7 @@ hold on
 plot(energy(:,2), 'r', 'LineWidth', 1.5);
 x = xlabel('Iteration','Interpreter','latex', 'fontsize', 12);
 y = ylabel('Energy [a.u]', 'Interpreter','latex', 'fontsize', 12);
-
+set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 
 
 meanEnergy = mean(energy(:,2))
@@ -73,6 +73,41 @@ figure(3);
 plot(energy(:,3));
 xlabel('Datapoints', 'fontsize', 12);
 ylabel('Alpha', 'fontsize', 12);
+
+%% Plot alphas for different betas
+figure(6)
+sizeBeta = size(beta060);
+
+
+plot(1:sizeBeta(1),beta060,1:sizeBeta(1),beta070,1:sizeBeta(1),beta075,1:sizeBeta(1),beta080,1:sizeBeta(1),beta090)
+axis([0 sizeBeta(1) -0.05 0.5])
+plotTickLatex2D
+l = legend('$\alpha$ for $\beta = 0.6$','$\alpha$ for $\beta = 0.7$','$\alpha $ for $ \beta = 0.75$','$\alpha$ for $\beta = 0.80$','$\alpha$ for $\beta = 0.9$');
+set(l,'Interpreter','latex')
+y = ylabel('$\alpha$ [1/$a_0$]','Interpreter','latex', 'fontsize', 12);
+x = xlabel('Iteration []', 'Interpreter','latex', 'fontsize', 12);
+set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
+
+set(y, 'Units', 'Normalized', 'Position', [-0.08, 0.5, 0]);
+set(x, 'Units', 'Normalized', 'Position', [0.5, -0.04, 0]);
+print(gcf,'-depsc2','alphBet.eps')
+
+%%
+subplot(4,1,1)
+plot(1:sizeBeta(1),beta060)
+axis([0 sizeBeta(1) -0.05 0.5])
+
+subplot(4,1,2)
+plot(1:sizeBeta(1),beta070)
+axis([0 sizeBeta(1) -0.05 0.5])
+
+subplot(4,1,3)
+plot(1:sizeBeta(1),beta075)
+axis([0 sizeBeta(1) -0.05 0.5])
+
+subplot(4,1,4)
+plot(1:sizeBeta(1),beta090)
+axis([0 sizeBeta(1) -0.05 0.5])
 
 %% Corr func
 

@@ -31,15 +31,18 @@ int main(){
 	double distances_nucleus[2];
 	int iteration; // Iteration number fot rescaling alpha
 	
+	double alpha_sum;
+
 	// Initialize variables
 	var = 0;
 	delta = 0.967;
 	alpha = 0;
 
-	alpha_start = 0.05;
-	alpha_stop = 0.25;
-	N = 500000;
-	throw_away = 50000;
+
+	alpha_start = 0.1;
+	alpha_stop = 0.1;
+	N = 1000000;
+	throw_away = 100000;
 	n = 0;
 
 
@@ -64,14 +67,15 @@ int main(){
 		// Initiation for each new loop
 		norejection = 0;
 		energy_mean = 0;
+		alpha_sum = 0;
 
 		// Print what alpha
 		printf("********** ALPHA = %.3f **********\n", alpha);
 
 		// Initialize positions
 		for(i = 0; i < 3; i++){
-			positions[0][i] = 1.0;
-			positions[1][i] = -1.0;
+			positions[0][i] = 10.0;
+			positions[1][i] = -10.0;
 		}
 
 
@@ -94,7 +98,7 @@ int main(){
 
 		// Initiate new_alpha
 		new_alpha = alpha;
-
+		alpha_sum = alpha;
 		// Main for-loop
 		for(j = 1; j < N + 1; j++){
 
@@ -171,13 +175,13 @@ int main(){
 
 				// Rescale alpha
 				new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);
-
+				alpha_sum += new_alpha;
 			}
 
 			// For each 5000nd iteration, print 
 			if(j%50000 == 0){
 				printf("%i out of %i steps\n", j, N);
-				printf("Alpha: %f \t terms: %i \t index: %i \n", new_alpha, n, j - throw_away-1);
+				printf("Alpha: %f \tAvg alpha: %f \n", new_alpha, alpha_sum/(j - throw_away + 1));
 			}
 		
 		}
