@@ -38,11 +38,11 @@ int main(){
 	delta = 0.967;
 	alpha = 0;
 
-
 	alpha_start = 0.1;
 	alpha_stop = 0.1;
 	N = 1000000;
 	throw_away = 100000;
+
 	n = 0;
 
 
@@ -78,7 +78,14 @@ int main(){
 			positions[1][i] = -10.0;
 		}
 
+		// Generate random numbers and get small displacements in the initial configuration
+		for(i = 0; i < 3; i++){
+			random = (double) rand() / (double) RAND_MAX;				
+			temp[0][i] = positions[0][i] + delta*(random - 0.5);
 
+			random = (double) rand() / (double) RAND_MAX;	
+			temp[1][i] = positions[1][i] + delta*(random - 0.5);
+		}
 
 		// Get initial distances
 		distance = getDistance(positions);
@@ -182,6 +189,8 @@ int main(){
 			if(j%50000 == 0){
 				printf("%i out of %i steps\n", j, N);
 				printf("Alpha: %f \tAvg alpha: %f \n", new_alpha, alpha_sum/(j - throw_away + 1));
+
+
 			}
 		
 		}
