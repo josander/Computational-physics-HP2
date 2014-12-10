@@ -183,7 +183,6 @@ int main(){
 			// For each 5000nd iteration, print 
 			if(j%50000 == 0){
 				printf("%i out of %i steps\n", j, N);
-				printf("Alpha: %f \t terms: %i \t index: %i \n", new_alpha, n, j - throw_away-1);
 			}
 		
 		}
