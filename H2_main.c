@@ -38,12 +38,13 @@ int main(){
 	delta = 0.967;
 	alpha = 0;
 
-	alpha_start = 0.1;
-	alpha_stop = 0.1;
-	N = 2000000;
-	throw_away = 100000;
+	alpha_start = 0.1482;
+	alpha_stop = 0.1482;
+	N = 10000000;
+	throw_away = 500000;
 
 	n = 0;
+
 
 
 	// Allocate memory for big arrays
@@ -181,18 +182,17 @@ int main(){
 				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j - throw_away - 1], energy_mean/(j - throw_away), new_alpha);
 
 				// Rescale alpha
-				new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);
-				alpha_sum += new_alpha;
+				//new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);
+
 			}
 
-			// For each 5000nd iteration, print 
+			// For each 5000nd iteration, print
+			 /*
 			if(j%50000 == 0){
 				printf("%i out of %i steps\n", j, N);
-				printf("Alpha: %f \tAvg alpha: %f \n", new_alpha, alpha_sum/(j - throw_away + 1));
-
 
 			}
-		
+			*/
 		}
 
 		// Get statistical inefficiency from the correlation function
