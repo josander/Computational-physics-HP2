@@ -73,7 +73,14 @@ int main(){
 			positions[1][i] = -1.0;
 		}
 
+		// Generate random numbers and get small displacements in the initial configuration
+		for(i = 0; i < 3; i++){
+			random = (double) rand() / (double) RAND_MAX;				
+			temp[0][i] = positions[0][i] + delta*(random - 0.5);
 
+			random = (double) rand() / (double) RAND_MAX;	
+			temp[1][i] = positions[1][i] + delta*(random - 0.5);
+		}
 
 		// Get initial distances
 		distance = getDistance(positions);
