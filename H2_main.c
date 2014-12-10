@@ -35,10 +35,10 @@ int main(){
 	var = 0;
 	delta = 0.967;
 	alpha = 0;
-	alpha_start = 0.10;
-	alpha_stop = 0.10;
-	N = 500000;
-	throw_away = 50000;
+	alpha_start = 0.15;
+	alpha_stop = 0.15;
+	N = 1000000;
+	throw_away = 0;//0000;
 	n = 0;
 
 	// Allocate memory for big arrays

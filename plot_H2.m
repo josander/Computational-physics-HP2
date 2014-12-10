@@ -34,18 +34,38 @@ print(gcf,'-depsc2','distHist.eps')
 
 % Import energy data
 energy = importdata('energy.data');
+%%
+set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 
 % Plot data
 figure(2);
 clf
 plot(energy(:,1), 'b');
 hold on
-plot(energy(:,2), 'r');
-xlabel('Datapoints', 'fontsize', 12);
-ylabel('Energy', 'fontsize', 12);
+plot(energy(:,2), 'r', 'LineWidth', 1.5);
+x = xlabel('Iteration','Interpreter','latex', 'fontsize', 12);
+y = ylabel('Energy [a.u]', 'Interpreter','latex', 'fontsize', 12);
+
 
 
 meanEnergy = mean(energy(:,2))
+
+dataS = size(energy);
+block_length = 10000;
+
+hold on
+
+for i = 1:block_length:dataS(1) 
+   plot(i+block_length - 1,mean(energy(i:i+block_length)), '. g', 'MarkerSize', 7)
+  
+end
+axis([0 1000000 -4 -1.5])
+plotTickLatex2D
+l = legend('Energy','Moving energy average', 'Block averages for N = 1000');
+set(l,'Interpreter','latex')
+set(y, 'Units', 'Normalized', 'Position', [-0.1, 0.5, 0]);
+%set(x, 'Units', 'Normalized', 'Position', [0.5, -0.01, 0]);
+print(gcf,'-depsc2','energyAvr.eps')
 
 %% Plot alpha
 
@@ -58,6 +78,7 @@ ylabel('Alpha', 'fontsize', 12);
 
 % import data
 data = importdata('energy.data');
+%%
 numlags = 200;
 corr = autocorr(data(:,1), numlags);
 
@@ -73,10 +94,16 @@ statistical_inefficiency = i - 1
 % plot
 figure(4);
 subplot(1,1,1)
-plot(0:numlags,corr, [0 numlags], [exp(-2) exp(-2)], i, corr(i),'x');
-title('Auto-correlation function','fontsize',12);
-xlabel('Lags','fontsize',12);
+plot(0:numlags,corr, [0 numlags], [exp(-2) exp(-2)],'--r', i-1, corr(i),'.', 'MarkerSize', 25);
+title('Auto-correlation function','Interpreter','latex','fontsize',14);
+x = xlabel('Iteration lag []','Interpreter','latex', 'fontsize', 12);
+y = ylabel('Energy autocorrelation []', 'Interpreter','latex', 'fontsize', 12);
 
+
+
+l = legend('Energy autocorrelation function','$y=e^{-2}$', 'Statistical inefficiency = 13');
+set(l,'Interpreter','latex')
+plotTickLatex2D
 %% Block averaging
 
 
@@ -94,5 +121,5 @@ xlabel('Blocksize','fontsize',12);
 ylabel('Statistical inefficiency','fontsize',12);
 title('Block averaging','fontsize',12);
 
->>>>>>> 3003507b00ddb7ba6d6d9ffb3b7a373fa915430e
+
 
