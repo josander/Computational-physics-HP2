@@ -70,9 +70,19 @@ print(gcf,'-depsc2','energyAvr.eps')
 %% Plot alpha
 
 figure(3);
-plot(energy(:,3));
-xlabel('Datapoints', 'fontsize', 12);
-ylabel('Alpha', 'fontsize', 12);
+plot(1:1900000,beta08, [0 1900000], [mean(beta08) mean(beta08)], 'LineWidth', 1);
+x = xlabel('Iterations [ ]', 'Interpreter','latex', 'fontsize', 12);
+y = ylabel('$\alpha$ [1/$a_0$]', 'Interpreter','latex', 'fontsize', 12);
+axis([0 1900000 0.1 0.2])
+plotTickLatex2D
+set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
+set(y, 'Units', 'Normalized', 'Position', [-0.1, 0.5, 0]);
+set(x, 'Units', 'Normalized', 'Position', [0.5, -0.06, 0]);
+
+l = legend('$\alpha$ for $\beta = 0.8$', '$\langle \alpha \rangle = 0.1482$');
+set(l,'Interpreter','latex')
+
+print(gcf,'-depsc2','alph08.eps')
 
 %% Plot alphas for different betas
 figure(6)
@@ -85,7 +95,7 @@ plotTickLatex2D
 l = legend('$\alpha$ for $\beta = 0.6$','$\alpha$ for $\beta = 0.7$','$\alpha $ for $ \beta = 0.75$','$\alpha$ for $\beta = 0.80$','$\alpha$ for $\beta = 0.9$');
 set(l,'Interpreter','latex')
 y = ylabel('$\alpha$ [1/$a_0$]','Interpreter','latex', 'fontsize', 12);
-x = xlabel('Iteration []', 'Interpreter','latex', 'fontsize', 12);
+x = xlabel('Iteration [ ]', 'Interpreter','latex', 'fontsize', 12);
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 
 set(y, 'Units', 'Normalized', 'Position', [-0.08, 0.5, 0]);

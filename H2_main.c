@@ -40,7 +40,7 @@ int main(){
 
 	alpha_start = 0.1;
 	alpha_stop = 0.1;
-	N = 1000000;
+	N = 2000000;
 	throw_away = 100000;
 
 	n = 0;
