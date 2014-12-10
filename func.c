@@ -232,7 +232,7 @@ double rescale_alpha(double alpha, double energy_l[], double grad_ln_wave[], dou
 	
 	int i;
 	double grad, gamma;
-	double A = 0.0;
+	double A = 1.0;
 	double beta = 0.75; // Shouble be (0.5,1]
 	double first_term, second_term, second_term_1, second_term_2;
 	double new_alpha;
