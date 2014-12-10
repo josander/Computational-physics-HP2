@@ -35,8 +35,8 @@ int main(){
 	var = 0;
 	delta = 0.967;
 	alpha = 0;
-	alpha_start = 0.05;
-	alpha_stop = 0.25;
+	alpha_start = 0.15;
+	alpha_stop = 0.15;
 	N = 500000;
 	throw_away = 0;
 
