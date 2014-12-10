@@ -14,7 +14,7 @@ Main program for a variational Monte Carlo simulation of a helium atom.
 int main(){
 
 	// Declaration of variables and arrays
-	int i, j, n;
+	int i, j;
 	int N; // Number of interations
 	double mean, mean2, var; // <f>, <f^2> and var[f]
 	double delta;
@@ -35,11 +35,12 @@ int main(){
 	var = 0;
 	delta = 0.967;
 	alpha = 0;
-	alpha_start = 0.15;
-	alpha_stop = 0.15;
-	N = 1000000;
-	throw_away = 0;//0000;
-	n = 0;
+
+	alpha_start = 0.05;
+	alpha_stop = 0.25;
+	N = 500000;
+	throw_away = 0;
+
 
 	// Allocate memory for big arrays
 	double *energy_l = malloc((N + 1) * sizeof(double));
@@ -71,6 +72,16 @@ int main(){
 			positions[0][i] = 1.0;
 			positions[1][i] = -1.0;
 		}
+
+		// Generate random numbers to get small displacements in the initial configuration
+		for(i = 0; i < 3; i++){
+			random = (double) rand() / (double) RAND_MAX;	
+			temp[0][i] = positions[0][i] + delta*(random - 0.5);
+
+			random = (double) rand() / (double) RAND_MAX;	
+			temp[1][i] = positions[1][i] + delta*(random - 0.5);
+		}
+
 
 		// Get initial distances
 		distance = getDistance(positions);
@@ -147,15 +158,12 @@ int main(){
 			// Skip the 'throw_away' first datapoints
 			if(j > throw_away){
 
-				n++;
-
 				// Get energies for the current configuration
 				energy_l[j - throw_away - 1] = get_local_e(positions, new_alpha);
 				energy_mean += energy_l[j - throw_away - 1];
 
 				// Get the gradient of ln(wavefunction) with respect to alpha
 				grad_ln_wave[j - throw_away - 1] = get_grad_ln_wave(distance, new_alpha);
-
 
 				// Get distances to nucleus
 				get_distances_nucleus(positions, distances_nucleus);
@@ -168,14 +176,13 @@ int main(){
 				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j - throw_away - 1], energy_mean/(j - throw_away), new_alpha);
 
 				// Rescale alpha
-				new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);
+				//new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);
 
 			}
 
+			// For each 5000nd iteration, print 
 			if(j%50000 == 0){
-				printf("%i out of %i steps\n", j, N);
-				printf("Alpha: %f \t terms: %i \t index: %i \n", new_alpha, n, j - throw_away-1);
-
+				//printf("%i out of %i steps\n", j, N);
 			}
 		
 		}
@@ -201,3 +208,4 @@ int main(){
 	free(energy_l); free(grad_ln_wave);
 	energy_l = NULL; grad_ln_wave = NULL;
 }
+
