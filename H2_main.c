@@ -35,8 +35,8 @@ int main(){
 	var = 0;
 	delta = 0.967;
 	alpha = 0;
-	alpha_start = 0.15;
-	alpha_stop = 0.15;
+	alpha_start = 0.05;
+	alpha_stop = 0.25;
 	N = 500000;
 	throw_away = 50000;
 	n = 0;
@@ -176,13 +176,13 @@ int main(){
 				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j - throw_away - 1], energy_mean/(j - throw_away), new_alpha);
 
 				// Rescale alpha
-				new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);
+				//new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);
 
 			}
 
 			// For each 5000nd iteration, print 
 			if(j%50000 == 0){
-				printf("%i out of %i steps\n", j, N);
+				//printf("%i out of %i steps\n", j, N);
 			}
 		
 		}
