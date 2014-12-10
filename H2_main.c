@@ -31,6 +31,8 @@ int main(){
 	double distances_nucleus[2];
 	int iteration; // Iteration number fot rescaling alpha
 	
+	double alpha_sum;
+
 	// Initialize variables
 	var = 0;
 	delta = 0.967;
@@ -39,8 +41,6 @@ int main(){
 	alpha_stop = 0.25;
 	N = 500000;
 	throw_away = 50000;
-	n = 0;
-
 
 	// Allocate memory for big arrays
 	double *energy_l = malloc((N + 1) * sizeof(double));
@@ -63,14 +63,15 @@ int main(){
 		// Initiation for each new loop
 		norejection = 0;
 		energy_mean = 0;
+		alpha_sum = 0;
 
 		// Print what alpha
 		printf("********** ALPHA = %.3f **********\n", alpha);
 
 		// Initialize positions
 		for(i = 0; i < 3; i++){
-			positions[0][i] = 1.0;
-			positions[1][i] = -1.0;
+			positions[0][i] = 10.0;
+			positions[1][i] = -10.0;
 		}
 
 		// Generate random numbers and get small displacements in the initial configuration
@@ -100,7 +101,7 @@ int main(){
 
 		// Initiate new_alpha
 		new_alpha = alpha;
-
+		alpha_sum = alpha;
 		// Main for-loop
 		for(j = 1; j < N + 1; j++){
 
@@ -183,6 +184,7 @@ int main(){
 			// For each 5000nd iteration, print 
 			if(j%50000 == 0){
 				//printf("%i out of %i steps\n", j, N);
+
 			}
 		
 		}
