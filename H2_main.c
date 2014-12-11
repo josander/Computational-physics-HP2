@@ -14,10 +14,9 @@ Main program for a variational Monte Carlo simulation of a helium atom.
 int main(){
 
 	// Declaration of variables and arrays
-	int i, j, n;
+	int i, j;
 	int N; // Number of interations
-	double mean, mean2, var; // <f>, <f^2> and var[f]
-	double delta;
+	double delta; // Correction parameter for generating new configurations
 	double q;
 	int throw_away, norejection; // Number of iterations to throw away in the begining, number of rejections
 	double random; // Random number [0,1]
@@ -25,26 +24,20 @@ int main(){
 	double positions[2][3]; // Positions in 3D for 2 particles
 	double temp[2][3]; // Temporary array for new positions
 	double p, p_temp; // Probabilities
-	double distance; 
+	double distance; // Distance between the two electrons
 	double wave_func;
-	double energy_mean;
-	double distances_nucleus[2];
-	int iteration; // Iteration number fot rescaling alpha
-	
+	double energy_mean; // Moving average
+	double distances_nucleus[2]; // Distance between the electrons and the nucleus
+	int iteration; // Iteration number for rescaling alpha
 	double alpha_sum;
 
 	// Initialize variables
-	var = 0;
 	delta = 0.967;
 	alpha = 0;
-
-	alpha_start = 0.1482;
-	alpha_stop = 0.1482;
-	N = 1000000;
-	throw_away = 50000;
-
-	n = 0;
-
+	alpha_start = 0.1;
+	alpha_stop = 0.1;
+	N = 100000;
+	throw_away = 0;
 
 
 	// Allocate memory for big arrays
@@ -107,6 +100,7 @@ int main(){
 		// Initiate new_alpha
 		new_alpha = alpha;
 		alpha_sum = alpha;
+
 		// Main for-loop
 		for(j = 1; j < N + 1; j++){
 
@@ -162,8 +156,7 @@ int main(){
 
 			// Skip the 'throw_away' first datapoints
 			if(j > throw_away){
-			
-				n++;
+		
 				// Get energies for the current configuration
 				energy_l[j - throw_away - 1] = get_local_e(positions, new_alpha);
 				energy_mean += energy_l[j - throw_away - 1];
@@ -175,8 +168,8 @@ int main(){
 				get_distances_nucleus(positions, distances_nucleus);
 
 				// Save distances to nucleus
-				//fprintf(m_file,"%f \n", distances_nucleus[0]);
-				//fprintf(m_file,"%f \n", distances_nucleus[1]);
+				fprintf(m_file,"%f \n", distances_nucleus[0]);
+				fprintf(m_file,"%f \n", distances_nucleus[1]);
 
 				// Save current energies
 				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j - throw_away - 1], energy_mean/(j - throw_away), new_alpha);
