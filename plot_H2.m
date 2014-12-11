@@ -205,4 +205,15 @@ var225 = var(a225)
 var25 = var(a25)
 
 std05 = std(a05)
+%%
+data = beta090;
+datasq = data.^2;
 
+
+norm = mean(datasq) - mean(data)^2;
+cov =  xcov(data, 500000);
+cov =  cov/max(cov);
+index = find(cov(500001:end) < exp(-2),1);
+phi_s = cov(500+index);
+
+sigma = sqrt(norm/(900000)*index)
