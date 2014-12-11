@@ -40,8 +40,8 @@ int main(){
 
 	alpha_start = 0.1482;
 	alpha_stop = 0.1482;
-	N = 10000000;
-	throw_away = 500000;
+	N = 1000000;
+	throw_away = 50000;
 
 	n = 0;
 
@@ -175,15 +175,15 @@ int main(){
 				get_distances_nucleus(positions, distances_nucleus);
 
 				// Save distances to nucleus
-				fprintf(m_file,"%f \n", distances_nucleus[0]);
-				fprintf(m_file,"%f \n", distances_nucleus[1]);
+				//fprintf(m_file,"%f \n", distances_nucleus[0]);
+				//fprintf(m_file,"%f \n", distances_nucleus[1]);
 
 				// Save current energies
 				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j - throw_away - 1], energy_mean/(j - throw_away), new_alpha);
 
-				// Rescale alpha
+				// Rescale alpha 
 				//new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);
-
+				// Should be a comment unless you want to rescale alpha
 			}
 
 			// For each 5000nd iteration, print
