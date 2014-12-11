@@ -14,7 +14,7 @@ Main program for a variational Monte Carlo simulation of a helium atom.
 int main(){
 
 	// Declaration of variables and arrays
-	int i, j, n;
+	int i, j;
 	int N; // Number of interations
 	double mean, mean2, var; // <f>, <f^2> and var[f]
 	double delta; // Correction parameter for generating new configurations
@@ -169,15 +169,15 @@ int main(){
 				get_distances_nucleus(positions, distances_nucleus);
 
 				// Save distances to nucleus
-				fprintf(m_file,"%f \n", distances_nucleus[0]);
-				fprintf(m_file,"%f \n", distances_nucleus[1]);
+				//fprintf(m_file,"%f \n", distances_nucleus[0]);
+				//fprintf(m_file,"%f \n", distances_nucleus[1]);
 
 				// Save current energies
 				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j - throw_away - 1], energy_mean/(j - throw_away), new_alpha);
 
-				// Rescale alpha
+				// Rescale alpha 
 				//new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);
-
+				// Should be a comment unless you want to rescale alpha
 			}
 
 			// For each 5000nd iteration, print

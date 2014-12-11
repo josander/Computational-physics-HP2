@@ -51,7 +51,7 @@ set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 meanEnergy = mean(energy(:,2))
 
 dataS = size(energy);
-block_length = 10000;
+block_length = 100000;
 
 hold on
 
@@ -59,9 +59,9 @@ for i = 1:block_length:dataS(1)
    plot(i+block_length - 1,mean(energy(i:i+block_length)), '. g', 'MarkerSize', 7)
   
 end
-axis([0 1000000 -4 -1.5])
+axis([0 9500000 -4 -1.75])
 plotTickLatex2D
-l = legend('Energy','Moving energy average', 'Block averages for N = 1000');
+l = legend('Energy','Moving energy average', 'Block averages for N = 100 000');
 set(l,'Interpreter','latex')
 set(y, 'Units', 'Normalized', 'Position', [-0.1, 0.5, 0]);
 %set(x, 'Units', 'Normalized', 'Position', [0.5, -0.01, 0]);
