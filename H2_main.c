@@ -16,7 +16,6 @@ int main(){
 	// Declaration of variables and arrays
 	int i, j;
 	int N; // Number of interations
-	double mean, mean2, var; // <f>, <f^2> and var[f]
 	double delta; // Correction parameter for generating new configurations
 	double q;
 	int throw_away, norejection; // Number of iterations to throw away in the begining, number of rejections
@@ -29,11 +28,10 @@ int main(){
 	double wave_func;
 	double energy_mean; // Moving average
 	double distances_nucleus[2]; // Distance between the electrons and the nucleus
-	int iteration; // Iteration number fot rescaling alpha
+	int iteration; // Iteration number for rescaling alpha
 	double alpha_sum;
 
 	// Initialize variables
-	var = 0;
 	delta = 0.967;
 	alpha = 0;
 	alpha_start = 0.1;
@@ -102,6 +100,7 @@ int main(){
 		// Initiate new_alpha
 		new_alpha = alpha;
 		alpha_sum = alpha;
+
 		// Main for-loop
 		for(j = 1; j < N + 1; j++){
 
@@ -169,8 +168,8 @@ int main(){
 				get_distances_nucleus(positions, distances_nucleus);
 
 				// Save distances to nucleus
-				//fprintf(m_file,"%f \n", distances_nucleus[0]);
-				//fprintf(m_file,"%f \n", distances_nucleus[1]);
+				fprintf(m_file,"%f \n", distances_nucleus[0]);
+				fprintf(m_file,"%f \n", distances_nucleus[1]);
 
 				// Save current energies
 				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j - throw_away - 1], energy_mean/(j - throw_away), new_alpha);
