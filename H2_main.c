@@ -17,7 +17,7 @@ int main(){
 	int i, j, n;
 	int N; // Number of interations
 	double mean, mean2, var; // <f>, <f^2> and var[f]
-	double delta;
+	double delta; // Correction parameter for generating new configurations
 	double q;
 	int throw_away, norejection; // Number of iterations to throw away in the begining, number of rejections
 	double random; // Random number [0,1]
@@ -25,26 +25,21 @@ int main(){
 	double positions[2][3]; // Positions in 3D for 2 particles
 	double temp[2][3]; // Temporary array for new positions
 	double p, p_temp; // Probabilities
-	double distance; 
+	double distance; // Distance between the two electrons
 	double wave_func;
-	double energy_mean;
-	double distances_nucleus[2];
+	double energy_mean; // Moving average
+	double distances_nucleus[2]; // Distance between the electrons and the nucleus
 	int iteration; // Iteration number fot rescaling alpha
-	
 	double alpha_sum;
 
 	// Initialize variables
 	var = 0;
 	delta = 0.967;
 	alpha = 0;
-
-	alpha_start = 0.1482;
-	alpha_stop = 0.1482;
-	N = 10000000;
-	throw_away = 500000;
-
-	n = 0;
-
+	alpha_start = 0.1;
+	alpha_stop = 0.1;
+	N = 100000;
+	throw_away = 0;
 
 
 	// Allocate memory for big arrays
@@ -162,8 +157,7 @@ int main(){
 
 			// Skip the 'throw_away' first datapoints
 			if(j > throw_away){
-			
-				n++;
+		
 				// Get energies for the current configuration
 				energy_l[j - throw_away - 1] = get_local_e(positions, new_alpha);
 				energy_mean += energy_l[j - throw_away - 1];
