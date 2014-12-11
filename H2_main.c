@@ -183,8 +183,7 @@ int main(){
 
 				// Rescale alpha 
 				//new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);
-				// Should be a comment unless you want to rescale alpha
-			}
+				// *******Should be a comment unless you want to rescale alpha			}
 
 			// For each 5000nd iteration, print
 			 /*
