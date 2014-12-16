@@ -1,6 +1,12 @@
 /*
  H2_main.c
-Main program for a variational Monte Carlo simulation of a helium atom.
+Main program for a variational Monte Carlo simulation of a helium atom. 
+The simulation iterates for a total of "N" iterations. 
+It equilibrated the system for "throw_away" number of iterations. 
+Results for these interations are not written to the outputfile. 
+It is also possible to optimize the "alpha"-parameter by rescaling it 
+with the function "rescale_alpha". This function is turned on by putting 
+the char-variable "rescale_on" to 'y'. 
  */
 
 #include <stdio.h>
@@ -30,6 +36,8 @@ int main(){
 	double distances_nucleus[2]; // Distance between the electrons and the nucleus
 	int iteration; // Iteration number for rescaling alpha
 	double alpha_sum;
+	char rescale_on = 'y';
+	int rescale_after_iterations;
 
 	// Initialize variables
 	delta = 0.967;
@@ -37,7 +45,8 @@ int main(){
 	alpha_start = 0.1;
 	alpha_stop = 0.1;
 	N = 100000;
-	throw_away = 0;
+	throw_away = 1000;
+	rescale_after_iterations = 10000;
 
 
 	// Allocate memory for big arrays
@@ -175,8 +184,10 @@ int main(){
 				fprintf(e_file,"%F \t %F \t %F \n", energy_l[j - throw_away - 1], energy_mean/(j - throw_away), new_alpha);
 
 				// Rescale alpha 
-				//new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);
-				// *******Should be a comment unless you want to rescale alpha			}
+				if(rescale_on == 'y' && j%rescale_after_iterations == 0){
+					new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);		
+				}
+			}
 
 			// For each 5000nd iteration, print
 			 /*

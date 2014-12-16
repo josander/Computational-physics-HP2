@@ -58,8 +58,8 @@ double get_local_e(double position[][3], double alpha){
 double get_wavefunction(double positions[][3], double alpha, double distance){
 
 	int i;
-	double r1;
-	double r2;
+	double r1 = 0.0;
+	double r2 = 0.0;
 	double wave_func;
 
 	for(i = 0; i < 3; i++){
@@ -81,8 +81,8 @@ double get_wavefunction(double positions[][3], double alpha, double distance){
 void get_distances_nucleus(double positions[][3], double distances_nucleus[]){
 		
 	int i;
-	distances_nucleus[0] = 0;
-	distances_nucleus[1] = 0;
+	distances_nucleus[0] = 0.0;
+	distances_nucleus[1] = 0.0;
 
 	for(i = 0; i < 3; i++){
 		distances_nucleus[0] += pow(positions[0][i],2);
@@ -153,7 +153,9 @@ void error_block_average(double *A, int length){
 	// Declaration and initiation of variables
 	int i, j;
 	int block_size;
-	double mean, mean2, var_f;
+	double mean = 0;
+	double mean2 = 0;
+	double var_f = 0;
 	double mean_F, mean2_F, var_F;
 	double s;
 
@@ -234,7 +236,10 @@ double rescale_alpha(double alpha, double energy_l[], double grad_ln_wave[], dou
 	double grad, gamma;
 	double A = 1.0;
 	double beta = 0.8; // Shouble be (0.5,1]
-	double first_term, second_term, second_term_1, second_term_2;
+	double first_term = 0;
+	double second_term = 0;
+	double second_term_1 = 0;
+	double second_term_2 = 0;
 	double new_alpha;
 
 	gamma = A * pow(iteration, -1*beta);
