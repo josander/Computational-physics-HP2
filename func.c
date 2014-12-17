@@ -95,7 +95,7 @@ void get_distances_nucleus(double positions[][3], double distances_nucleus[]){
 
 
 // Function that caculated the auto-correlation function, the statistical inefficiency
-void error_corr_func(double *A, int length){
+double error_corr_func(double *A, int length){
 
 	// Declaration and initiation of variables
 	int i, k;
@@ -143,6 +143,8 @@ void error_corr_func(double *A, int length){
 	sigmaTot = sqrt((mean2 - mean*mean)/steps*s);
 	printf("Result: %.5f ± %.5f \n", mean, sigmaTot);
 	printf("Statistical inefficiency (corr): %F \n", s);
+
+	return mean;
 
 }
 
