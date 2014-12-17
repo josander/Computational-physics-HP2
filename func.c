@@ -228,7 +228,7 @@ double get_grad_ln_wave(double distance, double alpha){
 }
 
 // Function that rescales the alpha-value
-double rescale_alpha(double alpha, double energy_l[], double grad_ln_wave[], double distance, int iteration, double beta){
+double rescale_alpha(double alpha, double energy_l[], double grad_ln_wave[], double distance, int iteration, int start_average, double beta){
 	
 	int i;
 	double grad, gamma;
@@ -239,16 +239,18 @@ double rescale_alpha(double alpha, double energy_l[], double grad_ln_wave[], dou
 	double second_term_2 = 0;
 	double new_alpha;
 
-	gamma = A * pow(iteration, -1*beta);
+	gamma = A * pow(iteration/start_average, -1*beta);
 
-	for(i = 0; i < iteration; i++){
+	//printf("Resc: %i\n",iteration/start_average);
+
+	for(i = iteration - start_average; i < iteration; i++){
 		first_term += (energy_l[i] * grad_ln_wave[i]);
 		second_term_1 += energy_l[i];
 		second_term_2 += grad_ln_wave[i];
 	}
 
-	first_term = (double) first_term / iteration;
-	second_term = (double) second_term_1 * second_term_2 / pow(iteration,2);
+	first_term = (double) first_term / start_average;
+	second_term = (double) second_term_1 * second_term_2 / pow(start_average,2);
 
 	grad = 2.0 * (first_term - second_term);
 

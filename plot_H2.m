@@ -4,7 +4,7 @@ clc
 clear all
 
 % Import data
-distNuc = importdata('distances.data');
+distNuc = dlmread('distances.data');
 %% Plot a histogram of the distances to the nucleus
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
@@ -30,11 +30,11 @@ set(l,'Interpreter','latex')
 print(gcf,'-depsc2','distHist.eps')
 
 
-%% Plot energies
+%% Load energy.data
 
 % Import energy data
-energy = importdata('energy.data');
-%%
+energy = dlmread('energy.data');
+%% Plot energies
 
 
 % Plot data
@@ -68,6 +68,11 @@ set(y, 'Units', 'Normalized', 'Position', [-0.1, 0.5, 0]);
 print(gcf,'-depsc2','energyAvr.eps')
 
 %% Plot alpha
+
+clf
+plot(energy(:,3));
+
+%%
 
 figure(3);
 plot(1:1900000,beta08, [0 1900000], [mean(beta08) mean(beta08)], 'LineWidth', 1);

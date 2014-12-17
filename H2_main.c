@@ -74,7 +74,7 @@ beta = 0;
 int main(){
 
 	// Declaration of variables and arrays
-	int i, j;
+	int i, j, n;
 	int N; // Number of interations
 	double delta; // Correction parameter for generating new configurations
 	double q;
@@ -99,12 +99,12 @@ int main(){
 	alpha = 0;
 
 	// *** Variables to change for different tasks ***
-	alpha_start = 0.1;
-	alpha_stop = 0.1;
-	N = 1000000;
-	throw_away = 10000;
+	alpha_start = 0.10;
+	alpha_stop = 0.20;
+	N = 2000000;
+	throw_away = 100000;
 	rescale_on  = 'y'; // Rescale alpha for rescale_on = 'y'
-	rescale_after_iterations = 10000; // Rescale alpha after rescale_after_iterations
+	rescale_after_iterations = 1000; // Rescale alpha after rescale_after_iterations
 	beta = 0.8; // Shouble be (0.5,1]
 
 	// Allocate memory for big arrays
@@ -129,6 +129,7 @@ int main(){
 		norejection = 0;
 		energy_mean = 0;
 		alpha_sum = 0;
+		n = 1;
 
 		// Print what alpha
 		printf("********** ALPHA = %.3f **********\n", alpha);
@@ -243,15 +244,15 @@ int main(){
 
 				// Rescale alpha 
 				if(rescale_on == 'y' && j%rescale_after_iterations == 0){
-					new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away, beta);		
+
+					n++;
+					//printf("In main: %i\n",n);
+
+					new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away, rescale_after_iterations, beta);		
+					alpha_sum += new_alpha;
 				}
 			}
 
-			// For each 5000nd iteration, print
-			if(j%50000 == 0){
-				printf("%i out of %i steps\n", j, N);
-
-			}
 		}
 
 		// Get statistical inefficiency from the correlation function
@@ -262,7 +263,7 @@ int main(){
 
 		// In the terminal, print how many rejections
 		printf("Tot nbr iteration: %i \nNbr eq iterations: %i \n", N, throw_away);
-		printf("Nbr rejections: %i \nLast alpha: %f\n", N-norejection, new_alpha);
+		printf("Nbr rejections: %i\nMean alpha: %f\n", N-norejection, alpha_sum/n);
 
 		// Print loop finished-line
 		printf("***********************************\n");
