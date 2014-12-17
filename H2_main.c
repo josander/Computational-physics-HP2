@@ -10,72 +10,85 @@ with the function "rescale_alpha". This function is turned on by putting
 the char-variable "rescale_on" to 'y'. For the different tasks in the assignment, 
 use the following settings for "*** Variables to change for different tasks ***". 
 
-** TASK 1: ** 
-alpha_start = 0.1;
-alpha_stop = 0.1;
-N = 1000000;
-throw_away = 0;
-rescale_on  = 'n';
-rescale_after_iterations = 0;
-beta = 0;
-nbr_simulations = 1;
+	** TASK 1: ** 
+	alpha_start = 0.1;
+	alpha_stop = 0.1;
+	N = 1000000;
+	throw_away = 0;
+	rescale_on  = 'n';
+	rescale_after_iterations = 0;
+	beta = 0;
+	nbr_simulations = 1;
 
-Plot distances.data in Matlab.
+	Plot distances.data in Matlab.
 
-** TASK 2: **
-alpha_start = 0.1;
-alpha_stop = 0.1;
-N = 1000000; 
-throw_away = 0; 
-rescale_on  = 'n';
-rescale_after_iterations = 0;
-beta = 0; 
-nbr_simulations = 1;
+	** TASK 2: **
+	alpha_start = 0.1;
+	alpha_stop = 0.1;
+	N = 1000000; 
+	throw_away = 0; 
+	rescale_on  = 'n';
+	rescale_after_iterations = 0;
+	beta = 0; 
+	nbr_simulations = 1;
 
-alpha_start = 0.1;
-alpha_stop = 0.1;
-N = 1000000; 
-throw_away = 50000; 
-rescale_on  = 'n';
-rescale_after_iterations = 0;
-beta = 0; 
-nbr_simulations = 1;
+	alpha_start = 0.1;
+	alpha_stop = 0.1;
+	N = 1000000; 
+	throw_away = 50000; 
+	rescale_on  = 'n';
+	rescale_after_iterations = 0;
+	beta = 0; 
+	nbr_simulations = 1;
 
-Run the simulation whith throw_away = 0. Plot energy.data and determine how big 
-throw_away should be. Set throw_away and make a proper simulation.
+	Run the simulation whith throw_away = 0. Plot energy.data and determine how big 
+	throw_away should be. Set throw_away and make a proper simulation.
 
-** TASK 3: **
-alpha_start = 0.05;
-alpha_stop = 0.25;
-N = 1000000;
-throw_away = 50000;
-rescale_on  = 'n';
-rescale_after_iterations = 0;
-beta = 0; 
-nbr_simulations = 1;
+	** TASK 3: **
+	alpha_start = 0.05;
+	alpha_stop = 0.25;
+	N = 1000000;
+	throw_away = 50000;
+	rescale_on  = 'n';
+	rescale_after_iterations = 0;
+	beta = 0; 
+	nbr_simulations = 1;
 
-** TASK 4: **
-alpha_start = 0.1;
-alpha_stop = 0.1;
-N = 1000000;
-throw_away = 50000;
-rescale_on  = 'y';
-rescale_after_iterations = 10000;
-beta = 0.8; 
-nbr_simulations = 1;
+	alpha_start = 0.15;
+	alpha_stop = 0.15;
+	N = 1000000;
+	throw_away = 50000;
+	rescale_on  = 'n';
+	rescale_after_iterations = 0;
+	beta = 0; 
+	nbr_simulations = 300;
 
-Simulate for different values of beta and plot the data. 
-Try for beta = {0.6, 0.7, 0.75, 0.8, 0.9}.
+	First do simulations for different values of alpha. Then make multiple 
+	simulations of the same value of alpha and take the mean value of the 
+	different simulations. Due to lack in disk quota, comment away the fprintf's.
 
-** TASK 5: **
-alpha_start = 0.1;
-alpha_stop = 0.1;
-N = 2000000;
-throw_away = 50000;
-rescale_on  = 'n';
-rescale_after_iterations = 0;
-beta = 0; 
-nbr_simulations = 1;
+	** TASK 4: **
+	alpha_start = 0.1;
+	alpha_stop = 0.1;
+	N = 1000000;
+	throw_away = 50000;
+	rescale_on  = 'y';
+	rescale_after_iterations = 10000;
+	beta = 0.8; 
+	nbr_simulations = 1;
+
+	Simulate for different values of beta and plot the data. 
+	Try for beta = {0.6, 0.7, 0.75, 0.8, 0.9}.
+
+	** TASK 5: **
+	alpha_start = 0.1482;
+	alpha_stop = 0.1482;
+	N = 3000000;
+	throw_away = 50000;
+	rescale_on  = 'n';
+	rescale_after_iterations = 0;
+	beta = 0; 
+	nbr_simulations = 1;
 
  */
 
@@ -116,6 +129,7 @@ int main(){
 	alpha = 0;
 
 	// *** Variables to change for different tasks ***
+
 	alpha_start = 0.1;
 	alpha_stop = 0.1;
 	N = 1000000; 
@@ -124,6 +138,7 @@ int main(){
 	rescale_after_iterations = 0;
 	beta = 0; 
 	nbr_simulations = 1;// Should be > than 300 if a mean of the mean is wanted, else should be 1
+
 
 	// Allocate memory for big arrays
 	double *energy_l = malloc((N + 1) * sizeof(double));
@@ -141,7 +156,11 @@ int main(){
 	FILE *e_file;
 	e_file = fopen("energy.data","w");
 
-	for(k = 0; k < nbr_simulations; k++){
+	for(k = 1; k < nbr_simulations + 1; k++){
+
+		if(nbr_simulations > 1){
+			printf("Simulation: %i\n", k);
+		}
 
 		// Perform the simulation for different alpha values
 		for(alpha = alpha_start; alpha <= alpha_stop; alpha = alpha + 0.025){
@@ -278,23 +297,28 @@ int main(){
 			// Get statistical inefficiency from the correlation function
 			mean[k] = error_corr_func(energy_l, N + 1 - throw_away);
 
-			// Get statistical inefficiency from block averaging
-			error_block_average(energy_l, N + 1 - throw_away);
+			if(nbr_simulations < 2){
 
-			// In the terminal, print how many rejections
-			printf("Tot nbr iteration: %i \nNbr eq iterations: %i \n", N, throw_away);
-			printf("Nbr rejections: %i\nMean alpha: %f\n", N-norejection, alpha_sum/n);
+				// Get statistical inefficiency from block averaging
+				error_block_average(energy_l, N + 1 - throw_away);
+
+				// In the terminal, print how many rejections
+				printf("Tot nbr iteration: %i \nNbr eq iterations: %i \n", N, throw_away);
+				printf("Nbr rejections: %i\nMean alpha: %f\n", N-norejection, alpha_sum/n);
+
+			}
 
 			// Print loop finished-line
 			printf("***********************************\n");
+
 		}
 	
 	}
 
 	// If many independent simulation, take a mean and determine the error bar
-	if(k > 1){
-		printf("For %i simulations: \n", k);
-		error_corr_func(mean, k);
+	if(nbr_simulations > 1){
+		printf("For %i simulations: \n", nbr_simulations);
+		error_corr_func(mean, nbr_simulations);
 	}
 
 	// Close the data-files
