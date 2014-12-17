@@ -104,6 +104,7 @@ double error_corr_func(double *A, int length){
 	double s = 0;
 	double sigmaTot;
 	int steps = 200;
+	int n = 0;
 
 	// Declaration of arrays
 	double first_term[steps];
@@ -124,8 +125,12 @@ double error_corr_func(double *A, int length){
 	for(i = 0; i < (length-steps); i++){
 		for(k = 0; k < steps; k++){
 			first_term[k] += (A[i]*A[i+k])/(length-steps);
+			if(k == 100){n++;}
 		}
 	}
+
+
+	printf("n: %i\t %i\n", n, length-steps);
 
 	// Calculate the correlation function
 	for(k = 0; k < steps; k++){
@@ -140,7 +145,7 @@ double error_corr_func(double *A, int length){
 	
 	s = i;
 
-	sigmaTot = sqrt(s*(mean2 - mean*mean)/steps);
+	sigmaTot = sqrt(s*(mean2 - mean*mean)/(length-steps));
 	printf("Result: %.5f ± %.5f \n", mean, sigmaTot);
 	printf("Statistical inefficiency (corr): %F \n", s);
 
