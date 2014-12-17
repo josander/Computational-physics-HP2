@@ -103,8 +103,7 @@ double error_corr_func(double *A, int length){
 	double mean2 = 0;
 	double s = 0;
 	double sigmaTot;
-	int steps = 200;
-	int n = 0;
+	int steps = 100;
 
 	// Declaration of arrays
 	double first_term[steps];
@@ -116,21 +115,17 @@ double error_corr_func(double *A, int length){
 	}
 
 	// Calculate all the expected values of A
-	for(i = 0; i < length-steps; i++){
-		mean += A[i]/(length-steps);
-		mean2 += ((A[i]*A[i])/(length-steps)); 
+	for(i = 0; i < length; i++){
+		mean += A[i]/length;
+		mean2 += ((A[i]*A[i])/length); 
 	}
 
 	// Calculate the first term
 	for(i = 0; i < (length-steps); i++){
 		for(k = 0; k < steps; k++){
 			first_term[k] += (A[i]*A[i+k])/(length-steps);
-			if(k == 100){n++;}
 		}
 	}
-
-
-	printf("n: %i\t %i\n", n, length-steps);
 
 	// Calculate the correlation function
 	for(k = 0; k < steps; k++){
@@ -145,8 +140,8 @@ double error_corr_func(double *A, int length){
 	
 	s = i;
 
-	sigmaTot = sqrt(s*(mean2 - mean*mean)/(length-steps));
-	printf("Result: %.5f ± %.5f \n", mean, sigmaTot);
+	sigmaTot = sqrt(s*(mean2 - mean*mean)/length);
+	printf("Result: %.6f ± %.6f \n", mean, sigmaTot);
 	printf("Statistical inefficiency (corr): %F \n", s);
 
 	return mean;
@@ -210,8 +205,6 @@ void error_block_average(double *A, int length){
 
 		var_F = (mean2_F - mean_F * mean_F);
 		s = block_size * var_F / var_f;
-
-
 		
 		fprintf(block,"%f \n", s);
 
