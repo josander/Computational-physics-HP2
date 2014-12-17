@@ -140,7 +140,7 @@ double error_corr_func(double *A, int length){
 	
 	s = i;
 
-	sigmaTot = sqrt((mean2 - mean*mean)/steps*s);
+	sigmaTot = sqrt(s*(mean2 - mean*mean)/steps);
 	printf("Result: %.5f ± %.5f \n", mean, sigmaTot);
 	printf("Statistical inefficiency (corr): %F \n", s);
 

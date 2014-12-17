@@ -13,41 +13,56 @@ use the following settings for "*** Variables to change for different tasks ***"
 ** TASK 1: ** 
 alpha_start = 0.1;
 alpha_stop = 0.1;
-N = 100000;
+N = 1000000;
 throw_away = 0;
 rescale_on  = 'n';
 rescale_after_iterations = 0;
-beta = 0; 
+beta = 0;
+nbr_simulations = 1;
+
+Plot distances.data in Matlab.
 
 ** TASK 2: **
 alpha_start = 0.1;
 alpha_stop = 0.1;
 N = 1000000; 
-throw_away = 10000; 
+throw_away = 0; 
 rescale_on  = 'n';
 rescale_after_iterations = 0;
 beta = 0; 
+nbr_simulations = 1;
 
-Plot energy.data and determine how big throw_away should be. 
-Set throw_away and make a proper simulation.
+alpha_start = 0.1;
+alpha_stop = 0.1;
+N = 1000000; 
+throw_away = 50000; 
+rescale_on  = 'n';
+rescale_after_iterations = 0;
+beta = 0; 
+nbr_simulations = 1;
+
+Run the simulation whith throw_away = 0. Plot energy.data and determine how big 
+throw_away should be. Set throw_away and make a proper simulation.
 
 ** TASK 3: **
 alpha_start = 0.05;
 alpha_stop = 0.25;
 N = 1000000;
-throw_away = 10000;
+throw_away = 50000;
 rescale_on  = 'n';
 rescale_after_iterations = 0;
 beta = 0; 
+nbr_simulations = 1;
 
 ** TASK 4: **
 alpha_start = 0.1;
 alpha_stop = 0.1;
 N = 1000000;
-throw_away = 10000;
+throw_away = 50000;
 rescale_on  = 'y';
 rescale_after_iterations = 10000;
 beta = 0.8; 
+nbr_simulations = 1;
 
 Simulate for different values of beta and plot the data. 
 Try for beta = {0.6, 0.7, 0.75, 0.8, 0.9}.
@@ -56,10 +71,11 @@ Try for beta = {0.6, 0.7, 0.75, 0.8, 0.9}.
 alpha_start = 0.1;
 alpha_stop = 0.1;
 N = 2000000;
-throw_away = 100000;
+throw_away = 50000;
 rescale_on  = 'n';
 rescale_after_iterations = 0;
 beta = 0; 
+nbr_simulations = 1;
 
  */
 
@@ -100,13 +116,13 @@ int main(){
 	alpha = 0;
 
 	// *** Variables to change for different tasks ***
-	alpha_start = 0.10;
-	alpha_stop = 0.10;
-	N = 200000;
-	throw_away = 100000;
-	rescale_on  = 'y'; // Rescale alpha for rescale_on = 'y'
-	rescale_after_iterations = 1000; // Rescale alpha after rescale_after_iterations
-	beta = 0.8; // Shouble be (0.5,1]
+	alpha_start = 0.1;
+	alpha_stop = 0.1;
+	N = 1000000; 
+	throw_away = 50000; 
+	rescale_on  = 'n';
+	rescale_after_iterations = 0;
+	beta = 0; 
 	nbr_simulations = 1; // Should be > than 300 if a mean of the mean is wanted, else should be 1
 
 	// Allocate memory for big arrays

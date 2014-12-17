@@ -127,7 +127,7 @@ axis([0 sizeBeta(1) -0.05 0.5])
 %% Corr func
 
 % import data
-data = importdata('energy.data');
+data = dlmread('energy.data');
 %%
 numlags = 200;
 corr = autocorr(data(:,1), numlags);
@@ -143,15 +143,14 @@ statistical_inefficiency = i - 1
 
 % plot
 figure(4);
-subplot(1,1,1)
+%subplot(1,1,1)
 plot(0:numlags,corr, [0 numlags], [exp(-2) exp(-2)],'--r', i-1, corr(i),'.', 'MarkerSize', 25);
 title('Auto-correlation function','Interpreter','latex','fontsize',14);
 x = xlabel('Iteration lag []','Interpreter','latex', 'fontsize', 12);
 y = ylabel('Energy autocorrelation []', 'Interpreter','latex', 'fontsize', 12);
 
-
-
-l = legend('Energy autocorrelation function','$y=e^{-2}$', 'Statistical inefficiency = 13');
+set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
+l = legend('Energy autocorrelation function','$y=e^{-2}$', 'Statistical inefficiency = 11');
 set(l,'Interpreter','latex')
 plotTickLatex2D
 
@@ -170,8 +169,8 @@ statistical_inefficiency = mean(block(blockLength/20:blockLength/10))
 % plot
 figure(5);
 plot(0:10:blockLength-10,block,'o', [0 blockLength], [statistical_inefficiency statistical_inefficiency]);
-xlabel('Blocksize','fontsize',12);
-ylabel('Statistical inefficiency','fontsize',12);
+xlabel('Blocksize []','fontsize',12);
+ylabel('Statistical inefficiency []','fontsize',12);
 title('Block averaging','fontsize',12);
 
 print(gcf,'-depsc2','energyBlock.eps')
