@@ -83,7 +83,7 @@ use the following settings for "*** Variables to change for different tasks ***"
 	** TASK 5: **
 	alpha_start = 0.1482;
 	alpha_stop = 0.1482;
-	N = 3000000;
+	N = 5000000;
 	throw_away = 50000;
 	rescale_on  = 'n';
 	rescale_after_iterations = 0;
@@ -131,7 +131,7 @@ int main(){
 	// *** Variables to change for different tasks ***
 	alpha_start = 0.1482;
 	alpha_stop = 0.1482;
-	N = 3000000;
+	N = 5000000;
 	throw_away = 50000;
 	rescale_on  = 'n';
 	rescale_after_iterations = 0;
