@@ -1,12 +1,59 @@
 /*
  H2_main.c
+
 Main program for a variational Monte Carlo simulation of a helium atom. 
 The simulation iterates for a total of "N" iterations. 
 It equilibrated the system for "throw_away" number of iterations. 
-Results for these interations are not written to the outputfile. 
+Results for the equilibrating interations are not written to the outputfile. 
 It is also possible to optimize the "alpha"-parameter by rescaling it 
 with the function "rescale_alpha". This function is turned on by putting 
 the char-variable "rescale_on" to 'y'. 
+
+TASK 1: 
+alpha_start = 0.1;
+alpha_stop = 0.1;
+N = 100000;
+throw_away = 0;
+rescale_after_iterations = 0;
+rescale_on  = 'n';
+beta = 0.8; 
+
+TASK 2:
+alpha_start = 0.1;
+alpha_stop = 0.1;
+N = 100000;
+throw_away = 1000;
+rescale_after_iterations = 10000;
+rescale_on  = 'n';
+beta = 0.8; 
+
+TASK 3:
+alpha_start = 0.1;
+alpha_stop = 0.1;
+N = 100000;
+throw_away = 1000;
+rescale_after_iterations = 10000;
+rescale_on  = 'n';
+beta = 0.8; 
+
+TASK 4:
+alpha_start = 0.1;
+alpha_stop = 0.1;
+N = 100000;
+throw_away = 1000;
+rescale_after_iterations = 10000;
+rescale_on  = 'n';
+beta = 0.8; 
+
+TASK 5:
+alpha_start = 0.1;
+alpha_stop = 0.1;
+N = 100000;
+throw_away = 1000;
+rescale_after_iterations = 10000;
+rescale_on  = 'n';
+beta = 0.8; 
+
  */
 
 #include <stdio.h>
@@ -36,17 +83,22 @@ int main(){
 	double distances_nucleus[2]; // Distance between the electrons and the nucleus
 	int iteration; // Iteration number for rescaling alpha
 	double alpha_sum;
-	char rescale_on = 'y';
+	char rescale_on;
 	int rescale_after_iterations;
+	double beta; // Parameter to rescale alpha
 
 	// Initialize variables
 	delta = 0.967;
 	alpha = 0;
+
+	// *** Variables to change for different tasks ***
 	alpha_start = 0.1;
 	alpha_stop = 0.1;
 	N = 100000;
 	throw_away = 1000;
-	rescale_after_iterations = 10000;
+	rescale_on  = 'n'; // Rescale alpha for rescale_on = 'y'
+	rescale_after_iterations = 10000; // Rescale alpha after rescale_after_iterations
+	beta = 0.8; // Shouble be (0.5,1]
 
 
 	// Allocate memory for big arrays
@@ -185,17 +237,15 @@ int main(){
 
 				// Rescale alpha 
 				if(rescale_on == 'y' && j%rescale_after_iterations == 0){
-					new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away);		
+					new_alpha = rescale_alpha(new_alpha, energy_l, grad_ln_wave, distance, j - throw_away, beta);		
 				}
 			}
 
 			// For each 5000nd iteration, print
-			 /*
 			if(j%50000 == 0){
 				printf("%i out of %i steps\n", j, N);
 
 			}
-			*/
 		}
 
 		// Get statistical inefficiency from the correlation function

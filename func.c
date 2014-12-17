@@ -153,9 +153,7 @@ void error_block_average(double *A, int length){
 	// Declaration and initiation of variables
 	int i, j;
 	int block_size;
-	double mean = 0;
-	double mean2 = 0;
-	double var_f = 0;
+	double mean, mean2, var_f;
 	double mean_F, mean2_F, var_F;
 	double s;
 
@@ -230,12 +228,11 @@ double get_grad_ln_wave(double distance, double alpha){
 }
 
 // Function that rescales the alpha-value
-double rescale_alpha(double alpha, double energy_l[], double grad_ln_wave[], double distance, int iteration){
+double rescale_alpha(double alpha, double energy_l[], double grad_ln_wave[], double distance, int iteration, double beta){
 	
 	int i;
 	double grad, gamma;
 	double A = 1.0;
-	double beta = 0.8; // Shouble be (0.5,1]
 	double first_term = 0;
 	double second_term = 0;
 	double second_term_1 = 0;
