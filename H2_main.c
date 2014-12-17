@@ -138,6 +138,7 @@ int main(){
 	beta = 0; 
 	nbr_simulations = 1;
 
+
 	// Allocate memory for big arrays
 	double *energy_l = malloc((N + 1) * sizeof(double));
 	double *grad_ln_wave = malloc((N + 1) * sizeof(double));
