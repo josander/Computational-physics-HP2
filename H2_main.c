@@ -7,52 +7,59 @@ It equilibrated the system for "throw_away" number of iterations.
 Results for the equilibrating interations are not written to the outputfile. 
 It is also possible to optimize the "alpha"-parameter by rescaling it 
 with the function "rescale_alpha". This function is turned on by putting 
-the char-variable "rescale_on" to 'y'. 
+the char-variable "rescale_on" to 'y'. For the different tasks in the assignment, 
+use the following settings for "*** Variables to change for different tasks ***". 
 
-TASK 1: 
+** TASK 1: ** 
 alpha_start = 0.1;
 alpha_stop = 0.1;
 N = 100000;
 throw_away = 0;
+rescale_on  = 'n';
 rescale_after_iterations = 0;
-rescale_on  = 'n';
-beta = 0.8; 
+beta = 0; 
 
-TASK 2:
+** TASK 2: **
 alpha_start = 0.1;
 alpha_stop = 0.1;
-N = 100000;
-throw_away = 1000;
-rescale_after_iterations = 10000;
+N = 1000000; 
+throw_away = 10000; 
 rescale_on  = 'n';
-beta = 0.8; 
+rescale_after_iterations = 0;
+beta = 0; 
 
-TASK 3:
+Plot energy.data and determine how big throw_away should be. 
+Set throw_away and make a proper simulation.
+
+** TASK 3: **
+alpha_start = 0.05;
+alpha_stop = 0.25;
+N = 1000000;
+throw_away = 10000;
+rescale_on  = 'n';
+rescale_after_iterations = 0;
+beta = 0; 
+
+** TASK 4: **
 alpha_start = 0.1;
 alpha_stop = 0.1;
-N = 100000;
-throw_away = 1000;
+N = 1000000;
+throw_away = 10000;
+rescale_on  = 'y';
 rescale_after_iterations = 10000;
-rescale_on  = 'n';
 beta = 0.8; 
 
-TASK 4:
-alpha_start = 0.1;
-alpha_stop = 0.1;
-N = 100000;
-throw_away = 1000;
-rescale_after_iterations = 10000;
-rescale_on  = 'n';
-beta = 0.8; 
+Simulate for different values of beta and plot the data. 
+Try for beta = {0.6, 0.7, 0.75, 0.8, 0.9}.
 
-TASK 5:
+** TASK 5: **
 alpha_start = 0.1;
 alpha_stop = 0.1;
-N = 100000;
-throw_away = 1000;
-rescale_after_iterations = 10000;
+N = 2000000;
+throw_away = 100000;
 rescale_on  = 'n';
-beta = 0.8; 
+rescale_after_iterations = 0;
+beta = 0; 
 
  */
 
@@ -94,12 +101,11 @@ int main(){
 	// *** Variables to change for different tasks ***
 	alpha_start = 0.1;
 	alpha_stop = 0.1;
-	N = 100000;
-	throw_away = 1000;
-	rescale_on  = 'n'; // Rescale alpha for rescale_on = 'y'
+	N = 1000000;
+	throw_away = 10000;
+	rescale_on  = 'y'; // Rescale alpha for rescale_on = 'y'
 	rescale_after_iterations = 10000; // Rescale alpha after rescale_after_iterations
 	beta = 0.8; // Shouble be (0.5,1]
-
 
 	// Allocate memory for big arrays
 	double *energy_l = malloc((N + 1) * sizeof(double));
