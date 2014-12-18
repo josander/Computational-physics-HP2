@@ -123,6 +123,7 @@ int main(){
 	int rescale_after_iterations;
 	double beta; // Parameter to rescale alpha
 	int nbr_simulations;
+	double result[2];
 
 	// Initialize variables
 	delta = 0.967;
@@ -130,9 +131,9 @@ int main(){
 
 	// *** Variables to change for different tasks ***
 
-	alpha_start = 0.1;
-	alpha_stop = 0.1;
-	N = 150000;
+	alpha_start = 0.1482;
+	alpha_stop = 0.1482;
+	N = 500000;
 	throw_away = 50000;
 	rescale_on  = 'y';
 	rescale_after_iterations = 10000;
@@ -296,7 +297,7 @@ int main(){
 			}
 
 			// Get statistical inefficiency from the correlation function
-			mean[k] = error_corr_func(energy_l, N + 1 - throw_away);
+			error_corr_func(energy_l, N + 1 - throw_away, result);
 
 			if(nbr_simulations < 2){
 
@@ -319,7 +320,7 @@ int main(){
 	// If many independent simulation, take a mean and determine the error bar
 	if(nbr_simulations > 1){
 		printf("For %i simulations: \n", nbr_simulations);
-		error_corr_func(mean, nbr_simulations);
+		//error_corr_func(mean, nbr_simulations);
 	}
 
 	// Close the data-files
