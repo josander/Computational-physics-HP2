@@ -130,15 +130,14 @@ int main(){
 	alpha = 0;
 
 	// *** Variables to change for different tasks ***
-
-	alpha_start = 0.1482;
-	alpha_stop = 0.1482;
-	N = 500000;
-	throw_away = 50000;
+	alpha_start = 0.1;
+	alpha_stop = 0.1;
+	N = 1000000;
+	throw_away = 0;
 	rescale_on  = 'n';
 	rescale_after_iterations = 0;
-	beta = 0; 
-	nbr_simulations = 100;
+	beta = 0;
+	nbr_simulations = 1;
 
 
 
@@ -283,11 +282,11 @@ int main(){
 					get_distances_nucleus(positions, distances_nucleus);
 
 					// Save distances to nucleus
-					//fprintf(m_file,"%f \n", distances_nucleus[0]);
-					//fprintf(m_file,"%f \n", distances_nucleus[1]);
+					fprintf(m_file,"%f \n", distances_nucleus[0]);
+					fprintf(m_file,"%f \n", distances_nucleus[1]);
 
 					// Save current energies
-					//fprintf(e_file,"%F \t %F \t %F \n", energy_l[j - throw_away - 1], energy_mean/(j - throw_away), new_alpha);
+					fprintf(e_file,"%F \t %F \t %F \n", energy_l[j - throw_away - 1], energy_mean/(j - throw_away), new_alpha);
 
 					// Rescale alpha 
 					if(rescale_on == 'y' && j%rescale_after_iterations == 0){
