@@ -3,7 +3,7 @@
 
 Main program for a variational Monte Carlo simulation of a helium atom. 
 The simulation iterates for a total of "N" iterations. 
-It equilibrated the system for "throw_away" number of iterations. 
+The program equilibrates the system for "throw_away" number of iterations. 
 Results for the equilibrating interations are not written to the outputfile. 
 It is also possible to optimize the "alpha"-parameter by rescaling it 
 with the function "rescale_alpha". This function is turned on by putting 
@@ -81,10 +81,10 @@ use the following settings for "*** Variables to change for different tasks ***"
 	Try for beta = {0.6, 0.7, 0.75, 0.8, 0.9}.
 
 	** TASK 5: **
-	alpha_start = 0.1482;
-	alpha_stop = 0.1482;
-	N = 5000000;
-	throw_away = 50000;
+	alpha_start = 0.1448;
+	alpha_stop = 0.1448;
+	N = 1000000000;
+	throw_away = 1000000;
 	rescale_on  = 'n';
 	rescale_after_iterations = 0;
 	beta = 0; 
