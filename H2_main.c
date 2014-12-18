@@ -329,16 +329,18 @@ int main(){
 		double Mean = 0;
 		double sigmaTot = 0;
 
+		// Sum the means and the sigmas for all simulations
 		for(i = 0; i < nbr_simulations; i++){
 			Mean += mean[i][0];
 			sigmaTot += mean[i][1];
 		}
 
-
+		// Divide by nbr of terms to get the mean values
 		Mean /= nbr_simulations;
 		sigmaTot /= nbr_simulations;
 
-		printf("For %i simulations: \nResult: %f ± %f\n", nbr_simulations,Mean, sigmaTot/sqrt(nbr_simulations));
+		// Print the results in the terminal
+		printf("For %i simulations: \nResult: %f ± %f\n", nbr_simulations, Mean, sigmaTot/sqrt(nbr_simulations));
 	}
 
 	// Close the data-files
