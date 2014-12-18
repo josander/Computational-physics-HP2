@@ -130,6 +130,7 @@ int main(){
 	alpha = 0;
 
 	// *** Variables to change for different tasks ***
+
 	alpha_start = 0.1482;
 	alpha_stop = 0.1482;
 	N = 500000;
@@ -138,6 +139,7 @@ int main(){
 	rescale_after_iterations = 0;
 	beta = 0; 
 	nbr_simulations = 100;
+
 
 
 	// Allocate memory for big arrays
