@@ -140,10 +140,14 @@ void error_corr_func(double *A, int length, double *result){
 	
 	s = i;
 
+	// Calculate the standard deviation
 	sigmaTot = sqrt(s*(mean2 - mean*mean)/length);
+
+	// Print the results in the terminal
 	printf("Result: %.6f ± %.6f \n", mean, sigmaTot);
 	printf("Statistical inefficiency (corr): %F \n", s);
 
+	// Save the results in an array
 	result[0] = mean;
 	result[1] = sigmaTot;
 
@@ -211,6 +215,7 @@ void error_block_average(double *A, int length){
 
 	}
 
+	// Print the statistical inefficiency in the terminal
 	printf("Statistical inefficiency (block): %f \n", s);
 
 	// Close file
@@ -241,8 +246,6 @@ double rescale_alpha(double alpha, double energy_l[], double grad_ln_wave[], dou
 	double new_alpha;
 
 	gamma = A * pow(iteration/start_average, -1*beta);
-
-	//printf("Resc: %i\n",iteration/start_average);
 
 	for(i = iteration - start_average; i < iteration; i++){
 		first_term += (energy_l[i] * grad_ln_wave[i]);

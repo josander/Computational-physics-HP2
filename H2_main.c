@@ -119,10 +119,10 @@ int main(){
 	double distances_nucleus[2]; // Distance between the electrons and the nucleus
 	int iteration; // Iteration number for rescaling alpha
 	double alpha_sum;
-	char rescale_on;
-	int rescale_after_iterations;
+	char rescale_on; // Char-variable to turn rescale_alpha on or off. Rescales for rescale_on = 'y'
+	int rescale_after_iterations; // Rescales after this many steps
 	double beta; // Parameter to rescale alpha
-	int nbr_simulations;
+	int nbr_simulations; // Number of simulations to perform in a row
 	double result[2];
 
 	// Initialize variables
@@ -316,9 +316,7 @@ int main(){
 
 			// Print loop finished-line
 			printf("***********************************\n");
-
 		}
-	
 	}
 
 	// If many independent simulation, take a mean and determine the error bar
