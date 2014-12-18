@@ -61,7 +61,7 @@ use the following settings for "*** Variables to change for different tasks ***"
 	rescale_on  = 'n';
 	rescale_after_iterations = 0;
 	beta = 0; 
-	nbr_simulations = 300;
+	nbr_simulations = 100;
 
 	First do simulations for different values of alpha. Then make multiple 
 	simulations of the same value of alpha and take the mean value of the 
@@ -130,22 +130,25 @@ int main(){
 	alpha = 0;
 
 	// *** Variables to change for different tasks ***
-
-	alpha_start = 0.1482;
-	alpha_stop = 0.1482;
-	N = 500000;
-	throw_away = 50000;
-	rescale_on  = 'y';
-	rescale_after_iterations = 10000;
-	beta = 0.9; 
-	nbr_simulations = 1; // Should be > than 300 if a mean of the mean is wanted, else should be 1
+	alpha_start = 0.1;
+	alpha_stop = 0.1;
+	N = 1000000;
+	throw_away = 0;
+	rescale_on  = 'n';
+	rescale_after_iterations = 0;
+	beta = 0;
+	nbr_simulations = 1;
 
 
 
 	// Allocate memory for big arrays
 	double *energy_l = malloc((N + 1) * sizeof(double));
 	double *grad_ln_wave = malloc((N + 1) * sizeof(double));
-	double *mean = malloc(nbr_simulations * sizeof(double));
+	double **mean = malloc(nbr_simulations * sizeof(double*));
+
+	for(i = 0; i < nbr_simulations; i++){
+		mean[i] = (double*) malloc(2 * sizeof(double));
+	}
 
 	// Seed for generating random numbers
 	srand(time(NULL));
@@ -158,10 +161,10 @@ int main(){
 	FILE *e_file;
 	e_file = fopen("energy.data","w");
 
-	for(k = 1; k < nbr_simulations + 1; k++){
+	for(k = 0; k < nbr_simulations; k++){
 
 		if(nbr_simulations > 1){
-			printf("Simulation: %i\n", k);
+			printf("Simulation: %i\n", k+1);
 		}
 
 		// Perform the simulation for different alpha values
@@ -299,6 +302,9 @@ int main(){
 			// Get statistical inefficiency from the correlation function
 			error_corr_func(energy_l, N + 1 - throw_away, result);
 
+			mean[k][0] = result[0];
+			mean[k][1] = result[1];
+
 			if(nbr_simulations < 2){
 
 				// Get statistical inefficiency from block averaging
@@ -319,8 +325,22 @@ int main(){
 
 	// If many independent simulation, take a mean and determine the error bar
 	if(nbr_simulations > 1){
-		printf("For %i simulations: \n", nbr_simulations);
-		//error_corr_func(mean, nbr_simulations);
+
+		double Mean = 0;
+		double sigmaTot = 0;
+
+		// Sum the means and the sigmas for all simulations
+		for(i = 0; i < nbr_simulations; i++){
+			Mean += mean[i][0];
+			sigmaTot += mean[i][1];
+		}
+
+		// Divide by nbr of terms to get the mean values
+		Mean /= nbr_simulations;
+		sigmaTot /= nbr_simulations;
+
+		// Print the results in the terminal
+		printf("For %i simulations: \nResult: %f ± %f\n", nbr_simulations, Mean, sigmaTot/sqrt(nbr_simulations));
 	}
 
 	// Close the data-files
