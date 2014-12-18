@@ -47,7 +47,7 @@ use the following settings for "*** Variables to change for different tasks ***"
 	** TASK 3: **
 	alpha_start = 0.05;
 	alpha_stop = 0.25;
-	N = 1000000;
+	N = 2000000;
 	throw_away = 50000;
 	rescale_on  = 'n';
 	rescale_after_iterations = 0;
@@ -56,7 +56,7 @@ use the following settings for "*** Variables to change for different tasks ***"
 
 	alpha_start = 0.15;
 	alpha_stop = 0.15;
-	N = 1000000;
+	N = 2000000;
 	throw_away = 50000;
 	rescale_on  = 'n';
 	rescale_after_iterations = 0;
@@ -64,8 +64,8 @@ use the following settings for "*** Variables to change for different tasks ***"
 	nbr_simulations = 100;
 
 	First do simulations for different values of alpha. Then make multiple 
-	simulations of the same value of alpha and take the mean value of the 
-	different simulations. Due to lack in disk quota, comment away the fprintf's.
+	simulations of the same value of alpha by setting nbr_simulations > 2. 
+	Due to lack in disk quota, comment away the fprintf's.
 
 	** TASK 4: **
 	alpha_start = 0.1;
@@ -138,8 +138,6 @@ int main(){
 	rescale_after_iterations = 0;
 	beta = 0;
 	nbr_simulations = 1;
-
-
 
 	// Allocate memory for big arrays
 	double *energy_l = malloc((N + 1) * sizeof(double));
