@@ -61,7 +61,7 @@ use the following settings for "*** Variables to change for different tasks ***"
 	rescale_on  = 'n';
 	rescale_after_iterations = 0;
 	beta = 0; 
-	nbr_simulations = 300;
+	nbr_simulations = 100;
 
 	First do simulations for different values of alpha. Then make multiple 
 	simulations of the same value of alpha and take the mean value of the 
@@ -137,13 +137,17 @@ int main(){
 	rescale_on  = 'n';
 	rescale_after_iterations = 0;
 	beta = 0; 
-	nbr_simulations = 1;
+	nbr_simulations = 100;
 
 
 	// Allocate memory for big arrays
 	double *energy_l = malloc((N + 1) * sizeof(double));
 	double *grad_ln_wave = malloc((N + 1) * sizeof(double));
-	double *mean = malloc(nbr_simulations * sizeof(double));
+	double **mean = malloc(nbr_simulations * sizeof(double*));
+
+	for(i = 0; i < nbr_simulations; i++){
+		mean[i] = (double*) malloc(2 * sizeof(double));
+	}
 
 	// Seed for generating random numbers
 	srand(time(NULL));
@@ -156,10 +160,10 @@ int main(){
 	FILE *e_file;
 	e_file = fopen("energy.data","w");
 
-	for(k = 1; k < nbr_simulations + 1; k++){
+	for(k = 0; k < nbr_simulations; k++){
 
 		if(nbr_simulations > 1){
-			printf("Simulation: %i\n", k);
+			printf("Simulation: %i\n", k+1);
 		}
 
 		// Perform the simulation for different alpha values
@@ -277,11 +281,11 @@ int main(){
 					get_distances_nucleus(positions, distances_nucleus);
 
 					// Save distances to nucleus
-					fprintf(m_file,"%f \n", distances_nucleus[0]);
-					fprintf(m_file,"%f \n", distances_nucleus[1]);
+					//fprintf(m_file,"%f \n", distances_nucleus[0]);
+					//fprintf(m_file,"%f \n", distances_nucleus[1]);
 
 					// Save current energies
-					fprintf(e_file,"%F \t %F \t %F \n", energy_l[j - throw_away - 1], energy_mean/(j - throw_away), new_alpha);
+					//fprintf(e_file,"%F \t %F \t %F \n", energy_l[j - throw_away - 1], energy_mean/(j - throw_away), new_alpha);
 
 					// Rescale alpha 
 					if(rescale_on == 'y' && j%rescale_after_iterations == 0){
@@ -296,6 +300,9 @@ int main(){
 
 			// Get statistical inefficiency from the correlation function
 			error_corr_func(energy_l, N + 1 - throw_away, result);
+
+			mean[k][0] = result[0];
+			mean[k][1] = result[1];
 
 			if(nbr_simulations < 2){
 
@@ -317,8 +324,20 @@ int main(){
 
 	// If many independent simulation, take a mean and determine the error bar
 	if(nbr_simulations > 1){
-		printf("For %i simulations: \n", nbr_simulations);
-		//error_corr_func(mean, nbr_simulations);
+
+		double Mean = 0;
+		double sigmaTot = 0;
+
+		for(i = 0; i < nbr_simulations; i++){
+			Mean += mean[i][0];
+			sigmaTot += mean[i][1];
+		}
+
+
+		Mean /= nbr_simulations;
+		sigmaTot /= nbr_simulations;
+
+		printf("For %i simulations: \nResult: %f ± %f\n", nbr_simulations,Mean, sigmaTot/sqrt(nbr_simulations));
 	}
 
 	// Close the data-files
