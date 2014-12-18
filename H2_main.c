@@ -83,7 +83,7 @@ use the following settings for "*** Variables to change for different tasks ***"
 	** TASK 5: **
 	alpha_start = 0.1482;
 	alpha_stop = 0.1482;
-	N = 3000000;
+	N = 5000000;
 	throw_away = 50000;
 	rescale_on  = 'n';
 	rescale_after_iterations = 0;
@@ -132,12 +132,13 @@ int main(){
 
 	alpha_start = 0.1;
 	alpha_stop = 0.1;
-	N = 1000000;
+	N = 150000;
 	throw_away = 50000;
 	rescale_on  = 'y';
 	rescale_after_iterations = 10000;
-	beta = 0.5; 
+	beta = 0.9; 
 	nbr_simulations = 1; // Should be > than 300 if a mean of the mean is wanted, else should be 1
+
 
 
 	// Allocate memory for big arrays

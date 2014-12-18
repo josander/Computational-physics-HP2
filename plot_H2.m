@@ -77,37 +77,42 @@ plot(energy(:,3));
 
 %%
 
+rescale_pause = 10000;
+
+beta9size = length(beta09)*rescale_pause;
 figure(3);
-plot(1:1900000,beta08, [0 1900000], [mean(beta08) mean(beta08)], 'LineWidth', 1);
+plot(1:rescale_pause:beta9size,beta09, [0 beta9size], [mean(beta09(500:end)) mean(beta09(500:end))]);
 x = xlabel('Iterations [ ]', 'Interpreter','latex', 'fontsize', 12);
 y = ylabel('$\alpha$ [1/$a_0$]', 'Interpreter','latex', 'fontsize', 12);
-axis([0 1900000 0.1 0.2])
+axis([0 beta9size 0.11 0.17])
 plotTickLatex2D
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 set(y, 'Units', 'Normalized', 'Position', [-0.1, 0.5, 0]);
 set(x, 'Units', 'Normalized', 'Position', [0.5, -0.06, 0]);
 
-l = legend('$\alpha$ for $\beta = 0.8$', '$\langle \alpha \rangle = 0.1482$');
+l = legend('$\alpha$ for $\beta = 0.9$', '$\langle \alpha \rangle = 0.1448$');
 set(l,'Interpreter','latex')
 
-print(gcf,'-depsc2','alph08.eps')
-
+print(gcf,'-depsc2','alph09.eps')
+mean(beta09(500:end))
 %% Plot alphas for different betas
 figure(6)
 sizeBeta = size(beta060);
 
+rescale_pause = 10000;
 
-plot(1:sizeBeta(1),beta060,1:sizeBeta(1),beta070,1:sizeBeta(1),beta075,1:sizeBeta(1),beta080,1:sizeBeta(1),beta090)
-axis([0 sizeBeta(1) -0.05 0.5])
+
+plot(1:rescale_pause:sizeBeta(1),beta050(1:rescale_pause:end),1:rescale_pause:sizeBeta(1),beta060(1:rescale_pause:end),1:rescale_pause:sizeBeta(1),beta070(1:rescale_pause:end),1:rescale_pause:sizeBeta(1),beta075(1:rescale_pause:end),1:rescale_pause:sizeBeta(1),beta080(1:rescale_pause:end),1:rescale_pause:sizeBeta(1),beta090(1:rescale_pause:end))
+axis([0 sizeBeta(1)-rescale_pause 0.1 0.2])
 plotTickLatex2D
-l = legend('$\alpha$ for $\beta = 0.6$','$\alpha$ for $\beta = 0.7$','$\alpha $ for $ \beta = 0.75$','$\alpha$ for $\beta = 0.80$','$\alpha$ for $\beta = 0.9$');
+l = legend('$\alpha$ for $\beta = 0.5$','$\alpha$ for $\beta = 0.6$','$\alpha$ for $\beta = 0.7$','$\alpha $ for $ \beta = 0.75$','$\alpha$ for $\beta = 0.80$','$\alpha$ for $\beta = 0.9$');
 set(l,'Interpreter','latex')
 y = ylabel('$\alpha$ [1/$a_0$]','Interpreter','latex', 'fontsize', 12);
 x = xlabel('Iteration [ ]', 'Interpreter','latex', 'fontsize', 12);
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 
-set(y, 'Units', 'Normalized', 'Position', [-0.08, 0.5, 0]);
-set(x, 'Units', 'Normalized', 'Position', [0.5, -0.04, 0]);
+set(y, 'Units', 'Normalized', 'Position', [-0.09, 0.5, 0]);
+set(x, 'Units', 'Normalized', 'Position', [0.5, -0.06, 0]);
 print(gcf,'-depsc2','alphBet.eps')
 
 %%
