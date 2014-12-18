@@ -84,7 +84,7 @@ figure(3);
 plot(1:rescale_pause:beta9size,beta09, [0 beta9size], [mean(beta09(500:end)) mean(beta09(500:end))]);
 x = xlabel('Iterations [ ]', 'Interpreter','latex', 'fontsize', 12);
 y = ylabel('$\alpha$ [1/$a_0$]', 'Interpreter','latex', 'fontsize', 12);
-axis([0 beta9size 0.11 0.17])
+axis([0 beta9size 0.135 0.151])
 plotTickLatex2D
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 set(y, 'Units', 'Normalized', 'Position', [-0.1, 0.5, 0]);
