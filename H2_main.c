@@ -132,12 +132,12 @@ int main(){
 
 	alpha_start = 0.1;
 	alpha_stop = 0.1;
-	N = 1000000; 
-	throw_away = 0; 
-	rescale_on  = 'n';
-	rescale_after_iterations = 0;
-	beta = 0; 
-	nbr_simulations = 1;// Should be > than 300 if a mean of the mean is wanted, else should be 1
+	N = 1000000;
+	throw_away = 50000;
+	rescale_on  = 'y';
+	rescale_after_iterations = 10000;
+	beta = 0.5; 
+	nbr_simulations = 1; // Should be > than 300 if a mean of the mean is wanted, else should be 1
 
 
 	// Allocate memory for big arrays

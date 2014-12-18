@@ -149,13 +149,15 @@ figure(4);
 %subplot(1,1,1)
 plot(0:numlags,corr, [0 numlags], [exp(-2) exp(-2)],'--r', i-1, corr(i),'.', 'MarkerSize', 25);
 title('Auto-correlation function','Interpreter','latex','fontsize',14);
-x = xlabel('Iteration lag []','Interpreter','latex', 'fontsize', 12);
-y = ylabel('Energy autocorrelation []', 'Interpreter','latex', 'fontsize', 12);
+x = xlabel('Iteration lag [ ]','Interpreter','latex', 'fontsize', 12);
+y = ylabel('Energy autocorrelation [ ]', 'Interpreter','latex', 'fontsize', 12);
 
 set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 l = legend('Energy autocorrelation function','$y=e^{-2}$', 'Statistical inefficiency = 11');
 set(l,'Interpreter','latex')
+axis([0 100 0 1.1])
 plotTickLatex2D
+set(x, 'Units', 'Normalized', 'Position', [0.5, -0.05, 0]);
 
 print(gcf,'-depsc2','energyCorr.eps')
 
@@ -167,15 +169,20 @@ block = importdata('block_s.data');
 blockLength = 500;
 
 % calculate the statistical inefficiency
-statistical_inefficiency = mean(block(blockLength/20:blockLength/10))
+statistical_inefficiency = mean(block(blockLength/25:blockLength/10))
 
 % plot
 figure(5);
-plot(0:10:blockLength-10,block,'o', [0 blockLength], [statistical_inefficiency statistical_inefficiency]);
-xlabel('Blocksize []','fontsize',12);
-ylabel('Statistical inefficiency []','fontsize',12);
-title('Block averaging','fontsize',12);
+set(gcf,'renderer','painters','PaperPosition',[0 0 4.7 3]);
 
+plot(0:10:blockLength-10,block,'o', [0 blockLength], [statistical_inefficiency statistical_inefficiency]);
+x = xlabel('Blocksize [ ]','Interpreter','latex','fontsize',12);
+ylabel('Statistical inefficiency [ ]','Interpreter','latex','fontsize',12);
+title('Block averaging','Interpreter','latex','fontsize',12);
+
+set(x, 'Units', 'Normalized', 'Position', [0.5, -0.05, 0]);
+
+plotTickLatex2D
 print(gcf,'-depsc2','energyBlock.eps')
 
 %% Average energy for different alpha
